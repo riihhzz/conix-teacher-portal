@@ -1,0 +1,70 @@
+/*
+ * Design token CONIX — diambil dari Figma "Pemograman desain".
+ * Dipakai sebagai utility Tailwind, mis. bg-cream, text-ink, border-bark, shadow-card.
+ */
+@theme {
+  /* Tipografi */
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Warna dasar */
+  --color-cream: #fdf3dd; /* latar halaman */
+  --color-paper: #fefaf1; /* isi slot / kartu terang */
+  --color-ink: #3a1f15; /* teks & border utama */
+  --color-bark: #451800; /* border kartu kuning */
+
+  /* Warna brand */
+  --color-brand: #f46c0c; /* tombol, sidebar */
+  --color-brand-dark: #d95a00;
+  --color-sun: #fbc045; /* gradasi panel (atas) */
+  --color-sun-light: #fdd786; /* gradasi panel (bawah) */
+  --color-honey: #fbb931; /* gradasi kartu & header tabel */
+  --color-honey-light: #fddd96;
+
+  /* Status */
+  --color-ok: #30ee00; /* Aktif */
+  --color-step: #12d400; /* langkah wizard selesai */
+  --color-warn: #ffe100; /* Draft */
+  --color-danger: #ff0000; /* Non Aktif / hapus */
+  --color-success-text: #178a00;
+
+  /* Bayangan */
+  --shadow-card: 0 6px 4px 0 rgb(0 0 0 / 0.33);
+  --shadow-soft: -0.25px 1px 2px 0 rgb(0 0 0 / 0.33);
+  --shadow-btn: -1.6px -3.2px 8.5px 0 rgb(0 0 0 / 0.33);
+  --shadow-chip: 0 5px 4px 0 rgb(0 0 0 / 0.39);
+  --shadow-slot: 5.7px 5.7px 13.7px 0 rgb(0 0 0 / 0.3);
+  --shadow-figure: 0 4px 4px rgb(0 0 0 / 0.25);
+
+  /* Lebar kontainer: frame Figma 1440px, dilebarkan agar margin di layar besar tidak terlalu lebar */
+  --container-page: 1840px;
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-fade-up: fade-up 0.55s var(--ease-out-soft) both;
+  --animate-pop-in: pop-in 0.22s var(--ease-out-soft) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

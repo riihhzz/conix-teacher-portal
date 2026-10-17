@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <script>
+      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
+      addEventListener('load', () => {
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
+        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
+      });
+    </script>
+    <title>Hasil Siswa · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <!-- Judul (Figma: Desktop - 31) -->
+      <header class="mt-8 flex flex-wrap items-end justify-between gap-4 lg:mt-12">
+        <div>
+          <h1 class="text-5xl font-bold sm:text-[70px] sm:leading-tight">Hasil Siswa</h1>
+          <p class="mt-1 font-body text-lg sm:text-[22px]">Pantau progres belajar dan peringkat XP siswa di kelas Anda.</p>
+        </div>
+        <p class="rounded-full border-2 border-ink bg-paper px-4 py-1.5 font-semibold">
+          Kode kelas: <span class="font-extrabold text-brand" data-class-code></span>
+        </p>
+      </header>
+
+      <section aria-label="Tiga besar" class="mt-8 grid gap-5 sm:grid-cols-3" data-podium data-stagger></section>
+
+      <div class="mt-8">
+        <label class="search">
+          <span class="sr-only">Cari siswa</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.5-4.5" /></svg>
+          <input type="search" class="input" placeholder="Search" data-search />
+        </label>
+      </div>
+
+      <div class="table-wrap mt-7">
+        <table class="table-conix min-w-[600px]">
+          <thead>
+            <tr>
+              <th class="w-24">Rank</th>
+              <th>Nama</th>
+              <th class="w-40">Misi Selesai</th>
+              <th class="w-36">Lencana</th>
+              <th class="w-48">XP</th>
+            </tr>
+          </thead>
+          <tbody data-rows data-stagger></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script type="module" src="/src/js/pages/siswa.js"></script>
+  </body>
+</html>

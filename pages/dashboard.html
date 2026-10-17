@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <script>
+      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
+      addEventListener('load', () => {
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
+        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
+      });
+    </script>
+    <title>Beranda · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <!-- Hero (Figma: Desktop - 1) -->
+      <section class="panel-sun relative mt-6 px-6 py-8 sm:px-10 md:mt-16 lg:min-h-[381px] lg:py-7">
+        <div class="relative z-10 max-w-[720px]">
+          <h1 class="text-4xl leading-tight font-bold sm:text-6xl lg:text-[70px]">Selamat datang di CONIX!</h1>
+          <p class="mt-4 text-lg font-bold sm:text-[26px]">
+            Halo, <span data-user-name>Guru</span>! Selamat datang di teacher portal CONIX.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="misi-editor.html" class="btn btn-primary btn-lg">+ Misi Baru</a>
+            <a href="materi.html?upload=1" class="btn btn-secondary btn-lg">Upload Materi</a>
+          </div>
+        </div>
+        <img src="/images/mascot/nomi.png" alt="" aria-hidden="true"
+          class="figure-shadow pointer-events-none absolute right-4 -bottom-[52px] hidden h-[calc(100%+121px)] w-auto md:block lg:right-[110px]" />
+      </section>
+
+      <!-- Statistik -->
+      <section aria-label="Statistik kelas" class="mt-7 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-9" data-stats data-stagger></section>
+
+      <!-- Kode kelas + daftar misi -->
+      <section class="mt-9 grid gap-8 xl:grid-cols-[1fr_360px]">
+        <div class="min-w-0">
+          <div class="mb-4 flex items-end justify-between gap-4">
+            <h2 class="text-2xl font-bold sm:text-[26px]">Misi Kelas</h2>
+            <a href="misi.html" class="font-semibold text-brand underline-offset-4 hover:underline">Lihat semua</a>
+          </div>
+          <ul class="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-x-10" data-missions data-stagger></ul>
+        </div>
+
+        <aside class="card-frame flex flex-col items-center text-center">
+          <img src="/images/mission/misi-harian.png" alt="" class="figure-shadow size-28" />
+          <h2 class="mt-3 text-2xl font-extrabold">Kode Kelas</h2>
+          <p class="mt-1 font-body text-bark">Bagikan kode ini ke siswa agar bisa bergabung di aplikasi CONIX.</p>
+          <p class="mt-4 rounded-[14px] border-3 border-dashed border-brand bg-paper px-5 py-2 text-3xl font-extrabold tracking-[0.15em]" data-class-code>—</p>
+          <button type="button" class="btn btn-primary mt-4" data-copy-code>Salin Kode</button>
+        </aside>
+      </section>
+    </main>
+
+    <script type="module" src="/src/js/pages/dashboard.js"></script>
+  </body>
+</html>

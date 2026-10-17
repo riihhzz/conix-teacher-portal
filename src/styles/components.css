@@ -1,0 +1,197 @@
+/*
+ * Komponen UI CONIX. Setiap kelas di sini meniru elemen pada Figma
+ * sehingga markup HTML tetap ringkas dan konsisten di semua halaman.
+ */
+@layer components {
+  /* ---------- Layout ---------- */
+  .page {
+    @apply mx-auto w-full max-w-page px-4 pb-16 sm:px-6 lg:px-8;
+  }
+
+  /* Header menempel di atas saat halaman di-scroll */
+  .site-header {
+    view-transition-name: site-header;
+    @apply sticky top-0 z-30 border-b-2 border-transparent bg-cream/85 backdrop-blur-md transition-[box-shadow,border-color] duration-300;
+  }
+  .site-header > .page {
+    @apply pb-2.5;
+  }
+  .site-header.is-scrolled {
+    @apply border-ink/15 bg-cream/90 shadow-[0_8px_20px_-10px_rgb(58_31_21/0.45)];
+  }
+
+  /* Animasi masuk: setiap blok utama halaman muncul bergantian */
+  main.page > * {
+    @apply animate-fade-up;
+  }
+  main.page > :nth-child(2) {
+    animation-delay: 70ms;
+  }
+  main.page > :nth-child(3) {
+    animation-delay: 140ms;
+  }
+  main.page > :nth-child(4) {
+    animation-delay: 210ms;
+  }
+  main.page > :nth-child(5) {
+    animation-delay: 280ms;
+  }
+  main.page > :nth-child(n + 6) {
+    animation-delay: 350ms;
+  }
+
+  /* Item daftar yang dirender JS ([data-stagger]) muncul berurutan saat halaman dibuka */
+  [data-stagger] > * {
+    @apply animate-fade-up;
+    animation-delay: calc(min(var(--i, 0), 10) * 45ms + 120ms);
+  }
+
+  /* Getar singkat saat input salah (mis. password keliru) */
+  .shake {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  /* Dropdown akun di header */
+  .dropdown {
+    @apply origin-top-right animate-pop-in;
+  }
+
+  /* Item sidebar meluncur masuk saat dibuka */
+  #sidebar.is-open .sidebar-item {
+    animation: slide-in-left 0.35s var(--ease-out-soft) both;
+    animation-delay: calc(var(--i) * 45ms + 80ms);
+  }
+
+  /* Modal <dialog> */
+  dialog[open] {
+    animation: pop-in 0.25s var(--ease-out-soft) both;
+  }
+  dialog[open]::backdrop {
+    animation: backdrop-in 0.25s ease-out both;
+  }
+
+  /* ---------- Permukaan ---------- */
+  /* Panel kuning bergradasi (hero, banner, kartu kategori) */
+  .panel-sun {
+    @apply rounded-[15px] border-2 border-ink bg-linear-to-b from-sun to-sun-light shadow-card;
+  }
+  /* Kartu krem dengan garis cokelat (statistik, materi) */
+  .card {
+    @apply rounded-[13px] border-2 border-ink bg-cream shadow-soft;
+  }
+  /* Kartu bergaris tebal (pratinjau misi, editor analisis) */
+  .card-frame {
+    @apply rounded-[40px] border-[6px] border-ink bg-cream p-5 shadow-soft sm:rounded-[48px] sm:border-8 sm:p-7;
+  }
+  /* Baris misi kuning (dashboard) */
+  .row-honey {
+    @apply rounded-[18px] border-3 border-bark bg-linear-to-b from-honey to-honey-light shadow-chip;
+  }
+
+  /* ---------- Tombol ---------- */
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-[13px] border-3 border-ink px-5 py-2 font-bold whitespace-nowrap transition select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-brand text-cream shadow-btn hover:bg-brand-dark;
+  }
+  .btn-secondary {
+    @apply bg-paper text-ink shadow-soft hover:bg-sun-light;
+  }
+  .btn-danger {
+    @apply bg-danger text-white shadow-soft hover:brightness-90;
+  }
+  .btn-sm {
+    @apply rounded-[9px] border-2 px-3 py-1 text-sm;
+  }
+  .btn-lg {
+    @apply px-6 py-2.5 text-xl;
+  }
+  .btn-icon {
+    @apply grid size-10 cursor-pointer place-items-center rounded-full transition hover:bg-sun-light/70;
+  }
+
+  /* ---------- Form ---------- */
+  .label {
+    @apply mb-1.5 block text-lg font-semibold text-ink;
+  }
+  .hint {
+    @apply font-body text-sm font-normal text-bark/80;
+  }
+  .input {
+    @apply w-full rounded-[18px] border-3 border-ink bg-white px-5 py-3 font-body text-base text-ink shadow-soft outline-none transition placeholder:text-ink/40 focus:border-brand focus:ring-4 focus:ring-brand/20;
+  }
+  .input[aria-invalid='true'] {
+    @apply border-danger focus:border-danger focus:ring-danger/20;
+  }
+  .field-error {
+    @apply mt-1 text-sm font-medium text-danger;
+  }
+  .search {
+    @apply relative block flex-1;
+  }
+  .search > svg {
+    @apply pointer-events-none absolute top-1/2 left-4 size-7 -translate-y-1/2 sm:size-8;
+  }
+  .search > input {
+    @apply pl-14 font-sans text-xl font-semibold sm:pl-16 sm:text-[26px];
+  }
+
+  /* Tab / filter berbentuk pil */
+  .tab {
+    @apply inline-flex cursor-pointer items-center justify-center rounded-[9px] border-2 border-ink bg-paper px-3 py-1 text-sm font-bold whitespace-nowrap text-ink shadow-soft transition hover:bg-sun-light aria-selected:bg-brand aria-selected:text-cream;
+  }
+
+  /* ---------- Status ---------- */
+  .badge {
+    @apply inline-flex min-w-20 shrink-0 items-center justify-center rounded-[9px] border-[1.5px] border-bark px-3 py-0.5 text-base font-bold text-ink shadow-chip;
+  }
+  .badge-aktif {
+    @apply bg-ok;
+  }
+  .badge-draft {
+    @apply bg-warn;
+  }
+  .badge-nonaktif {
+    @apply bg-danger;
+  }
+
+  /* ---------- Misi: analisis ---------- */
+  /* Kartu pilihan (Penawaran, Naik, ...) */
+  .chip-card {
+    @apply inline-flex min-w-32 cursor-pointer items-center justify-center rounded-[12px] border-3 border-bark bg-linear-to-b from-honey to-honey-light px-4 py-2 text-lg font-bold text-ink shadow-chip transition hover:-translate-y-0.5;
+  }
+  /* Slot jawaban (border oranye) */
+  .slot {
+    @apply flex min-h-14 w-full items-center justify-center rounded-[21px] border-4 border-brand bg-paper px-3 text-center text-lg font-bold text-ink shadow-slot transition sm:text-xl;
+  }
+
+  /* ---------- Tabel ---------- */
+  .table-wrap {
+    @apply overflow-x-auto rounded-[10px] border-3 border-ink bg-cream shadow-soft;
+  }
+  .table-conix {
+    @apply w-full border-collapse text-left;
+  }
+  .table-conix th {
+    @apply border-b-2 border-ink bg-honey px-4 py-3 text-center text-sm font-bold;
+  }
+  .table-conix td {
+    @apply border-t-2 border-ink px-4 py-3 text-center font-semibold;
+  }
+  .table-conix tr:first-child td {
+    @apply border-t-0;
+  }
+  .table-conix th + th,
+  .table-conix td + td {
+    @apply border-l-2 border-ink;
+  }
+  .table-conix tbody tr {
+    @apply transition-colors hover:bg-paper;
+  }
+
+  /* ---------- Gambar ---------- */
+  .figure-shadow {
+    filter: drop-shadow(var(--shadow-figure));
+  }
+}

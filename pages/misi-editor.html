@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <script>
+      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
+      addEventListener('load', () => {
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
+        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
+      });
+    </script>
+    <title>Buat Misi · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <hr class="mt-3 border-t-3 border-ink" />
+
+      <!-- Stepper (Figma: Informasi — Petunjuk — Analisis — Publikasi) -->
+      <nav aria-label="Langkah pembuatan misi" class="mt-6 overflow-x-auto pb-1">
+        <ol class="mx-auto flex w-max items-center" data-stepper></ol>
+      </nav>
+
+      <form novalidate class="mx-auto mt-6 max-w-[1200px]" data-wizard>
+        <!-- LANGKAH 1 · Informasi (Figma: Desktop - 32) -->
+        <section class="space-y-5" data-step="1">
+          <header>
+            <h1 class="text-3xl font-bold sm:text-[40px]" data-heading>Buat Misi baru</h1>
+            <p class="font-body text-lg sm:text-[22px]">Isi informasi dasar untuk membuat misi investigasi baru.</p>
+          </header>
+
+          <div>
+            <label class="label" for="judul">Judul Misi</label>
+            <input class="input" id="judul" name="judul" required maxlength="80" placeholder="Contoh: Misteri Tiket Konser" />
+          </div>
+
+          <div>
+            <span class="label">Upload Foto <span class="hint">(opsional · maks 1 MB)</span></span>
+            <div class="flex items-center gap-4 rounded-[18px] border-3 border-ink bg-white p-2 pr-4 shadow-soft">
+              <img alt="" class="hidden size-14 rounded-[10px] border-2 border-ink object-cover" data-photo-preview />
+              <label class="btn btn-sm btn-secondary">
+                Pilih Gambar
+                <input type="file" accept="image/*" class="sr-only" data-photo-input />
+              </label>
+              <span class="min-w-0 flex-1 truncate font-body text-bark" data-photo-name>Belum ada foto</span>
+              <button type="button" class="cursor-pointer text-sm font-semibold text-danger underline" data-photo-clear hidden>Hapus</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="label" for="deskripsi">Deskripsi Kasus</label>
+            <textarea class="input min-h-36" id="deskripsi" name="deskripsi" required maxlength="400" placeholder="Ceritakan kasus ekonomi yang harus diselidiki siswa..."></textarea>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2 md:gap-x-28">
+            <div>
+              <label class="label" for="xp">Jumlah XP</label>
+              <input class="input" id="xp" name="xp" type="number" min="1" max="100000" step="1" required placeholder="500" />
+            </div>
+            <div>
+              <label class="label" for="lencana">Reward Lencana</label>
+              <input class="input" id="lencana" name="lencana" maxlength="40" placeholder="Contoh: Detektif Permintaan" />
+            </div>
+          </div>
+
+          <div>
+            <span class="label" id="badge-label">Gambar Lencana</span>
+            <div role="radiogroup" aria-labelledby="badge-label" class="flex flex-wrap gap-3" data-badge-list></div>
+          </div>
+        </section>
+
+        <!-- LANGKAH 2 · Petunjuk (Figma: Desktop - 33 / 38) -->
+        <section data-step="2" hidden>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-[40px]">Editor Petunjuk</h1>
+            <p class="font-body text-lg sm:text-[22px]">Atur informasi yang akan ditemukan siswa selama investigasi.</p>
+          </header>
+
+          <div class="mt-5 flex flex-col-reverse gap-8 lg:flex-row lg:justify-between">
+            <div class="w-full space-y-5 lg:max-w-[600px]" data-clue-form>
+              <div>
+                <label class="label" for="clue-judul">Judul Petunjuk</label>
+                <input class="input" id="clue-judul" maxlength="40" placeholder="Contoh: Tiket" data-field="judul" />
+              </div>
+              <div>
+                <span class="label" id="clue-icon-label">Pilih Icon</span>
+                <div role="radiogroup" aria-labelledby="clue-icon-label" class="flex flex-wrap gap-2.5 rounded-[18px] border-3 border-ink bg-white p-3 shadow-soft" data-icon-list></div>
+              </div>
+              <div>
+                <label class="label" for="clue-simulasi">Simulasi <span class="hint">(opsional)</span></label>
+                <input class="input" id="clue-simulasi" maxlength="100" placeholder="Contoh: Grafik harga tiket minggu ini" data-field="simulasi" />
+              </div>
+
+              <div role="radiogroup" aria-label="Jenis data petunjuk" class="flex gap-2 pt-2">
+                <label class="tab has-checked:bg-brand has-checked:text-cream">
+                  <input type="radio" name="clue-type" value="angka" class="sr-only" data-clue-type /> Data Angka
+                </label>
+                <label class="tab has-checked:bg-brand has-checked:text-cream">
+                  <input type="radio" name="clue-type" value="pesan" class="sr-only" data-clue-type /> Pesan
+                </label>
+              </div>
+
+              <div data-type-panel="angka">
+                <p class="text-xl font-medium text-danger">Atur data angka sebagai bahan analisis siswa!</p>
+                <div class="mt-3 flex flex-wrap gap-5 sm:gap-12">
+                  <label class="w-44">
+                    <span class="mb-1 block text-sm font-semibold">Awal</span>
+                    <input class="input font-sans text-xl font-semibold" placeholder="Rp 100k" data-field="awal" />
+                  </label>
+                  <label class="w-44">
+                    <span class="mb-1 block text-sm font-semibold">Akhir</span>
+                    <input class="input font-sans text-xl font-semibold" placeholder="Rp 150k" data-field="akhir" />
+                  </label>
+                </div>
+              </div>
+              <div data-type-panel="pesan" hidden>
+                <p class="text-xl font-medium text-danger">Atur pesan sebagai bahan analisis siswa!</p>
+                <label class="mt-3 block">
+                  <span class="sr-only">Pesan</span>
+                  <textarea class="input min-h-24 font-sans text-lg font-semibold" maxlength="200" placeholder="“Harga sedang naik, jadi kami menambah stok…”" data-field="pesan"></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div role="tablist" aria-label="Pilih petunjuk" class="flex gap-3 lg:w-[224px] lg:flex-col lg:pt-16" data-clue-tabs></div>
+          </div>
+        </section>
+
+        <!-- LANGKAH 3 · Analisis (Figma: Desktop - 41) -->
+        <section data-step="3" hidden>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-[40px]">Editor Analisis</h1>
+            <p class="max-w-[780px] font-body text-lg sm:text-[22px]">
+              Tentukan kartu yang tersedia bagi siswa dan susunan hubungan yang menjadi kunci jawaban.
+            </p>
+          </header>
+
+          <div class="mt-5 grid gap-8 lg:grid-cols-2 lg:gap-24">
+            <div class="card-frame">
+              <p class="mb-4 font-body text-bark">Pilih kotak, lalu klik kartu di sebelah kanan. Urutan: kotak 1 → 2 → 3 → 4.</p>
+              <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3" data-slots></div>
+            </div>
+            <div class="card-frame flex flex-col">
+              <div class="flex flex-wrap justify-center gap-3" data-cards></div>
+              <div class="mt-auto flex gap-2 pt-6">
+                <label class="flex-1">
+                  <span class="sr-only">Kartu baru</span>
+                  <input class="input py-2" maxlength="20" placeholder="Tambah kartu, mis. Pendapatan" data-new-card />
+                </label>
+                <button type="button" class="btn btn-primary" data-add-card>Tambah</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <label class="label" for="penjelasan">Penjelasan Jawaban</label>
+            <p class="hint mb-2">Ditampilkan ke siswa setelah misi berhasil dipecahkan.</p>
+            <textarea class="input min-h-28" id="penjelasan" maxlength="400" placeholder="Saat harga tiket naik, jumlah pembeli turun. Inilah hukum permintaan..." data-explanation></textarea>
+          </div>
+        </section>
+
+        <!-- LANGKAH 4 · Publikasi / Pratinjau (Figma: Desktop - 42) -->
+        <section data-step="4" hidden>
+          <h1 class="text-3xl font-bold sm:text-[40px]">Pratinjau Misi</h1>
+          <p class="font-body text-lg">Begini tampilan misi di aplikasi siswa. Periksa sebelum dipublikasikan.</p>
+          <div class="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-14" data-preview></div>
+          <div class="mt-8 rounded-[18px] border-3 border-dashed border-ink/50 bg-paper p-4 font-body" data-checklist></div>
+        </section>
+
+        <!-- Navigasi -->
+        <div class="mt-10 flex items-center justify-between gap-3">
+          <button type="button" class="btn btn-primary px-4 sm:px-6 sm:py-2.5 sm:text-xl" data-back>Kembali</button>
+          <div class="flex gap-3">
+            <button type="button" class="btn btn-primary px-4 sm:px-6 sm:py-2.5 sm:text-xl" data-save-draft>Simpan Draft</button>
+            <button type="button" class="btn btn-primary px-4 sm:px-6 sm:py-2.5 sm:text-xl" data-next>Lanjut</button>
+          </div>
+        </div>
+      </form>
+    </main>
+
+    <script type="module" src="/src/js/pages/misi-editor.js"></script>
+  </body>
+</html>

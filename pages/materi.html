@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <script>
+      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
+      addEventListener('load', () => {
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
+        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
+      });
+    </script>
+    <title>Materi · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <!-- Hero -->
+      <section class="mt-6 grid gap-6 lg:grid-cols-[1fr_400px]">
+        <div class="panel-sun relative overflow-hidden px-6 py-7 sm:px-9">
+          <h1 class="text-4xl font-bold sm:text-[60px] sm:leading-tight">Materi Pembelajaran</h1>
+          <p class="mt-1 max-w-2xl font-body text-lg sm:text-[22px]">
+            Upload dan kelola materi ekonomi yang dipelajari siswa di aplikasi CONIX.
+          </p>
+        </div>
+        <div class="panel-sun flex flex-col items-center justify-center gap-3 px-6 py-6 text-center">
+          <p class="text-3xl font-bold sm:text-[44px]">Tambah Materi</p>
+          <button type="button" class="btn btn-primary btn-lg" data-upload>+ Upload Materi</button>
+        </div>
+      </section>
+
+      <!-- Kategori (Figma: Group 55 / 57) -->
+      <h2 class="mt-10 text-2xl font-bold sm:text-[26px]">Kategori Materi</h2>
+      <section class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-[326px_326px]" data-categories data-stagger></section>
+
+      <!-- Daftar materi -->
+      <section class="mt-10">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center">
+          <label class="search">
+            <span class="sr-only">Cari materi</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.5-4.5" /></svg>
+            <input type="search" class="input" placeholder="Search" data-search />
+          </label>
+          <div role="tablist" aria-label="Filter kategori" class="flex gap-2" data-filter>
+            <button type="button" role="tab" class="tab" data-value="" aria-selected="true">Semua</button>
+            <button type="button" role="tab" class="tab" data-value="permintaan" aria-selected="false">Permintaan</button>
+            <button type="button" role="tab" class="tab" data-value="penawaran" aria-selected="false">Penawaran</button>
+          </div>
+        </div>
+        <ul class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3" data-list data-stagger></ul>
+      </section>
+    </main>
+
+    <!-- Form upload / edit materi -->
+    <template id="materi-form">
+      <form novalidate class="flex max-h-[90vh] flex-col">
+        <div class="flex items-center justify-between border-b-3 border-ink px-6 py-4">
+          <h2 class="text-2xl font-bold" data-title>Upload Materi</h2>
+          <button type="button" class="btn-icon text-2xl font-bold" data-close aria-label="Tutup">&times;</button>
+        </div>
+
+        <div class="space-y-4 overflow-y-auto px-6 py-5">
+          <div>
+            <label class="label" for="m-judul">Judul Materi</label>
+            <input class="input" id="m-judul" name="judul" required maxlength="120" placeholder="Contoh: Pengertian Permintaan" />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label class="label" for="m-kategori">Kategori</label>
+              <select class="input" id="m-kategori" name="kategori" required>
+                <option value="permintaan">Permintaan</option>
+                <option value="penawaran">Penawaran</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" for="m-status">Status</label>
+              <select class="input" id="m-status" name="status">
+                <option value="terbit">Terbit (tampil di aplikasi)</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="label" for="m-ringkasan">Ringkasan</label>
+            <input class="input" id="m-ringkasan" name="ringkasan" maxlength="160" placeholder="Satu kalimat singkat tentang materi" />
+          </div>
+          <div>
+            <label class="label" for="m-konten">Isi Materi</label>
+            <textarea class="input min-h-40" id="m-konten" name="konten" required placeholder="Tulis penjelasan materi untuk siswa..."></textarea>
+          </div>
+          <div>
+            <label class="label" for="m-video">Link Video <span class="hint">(opsional)</span></label>
+            <input class="input" id="m-video" name="videoUrl" type="url" placeholder="https://youtube.com/..." />
+          </div>
+          <div>
+            <span class="label">Lampiran File <span class="hint">(PDF, gambar, PPT · maks 2 MB)</span></span>
+            <label class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-[18px] border-3 border-dashed border-ink bg-white px-4 py-6 text-center transition hover:bg-paper" data-dropzone>
+              <input type="file" name="file" class="sr-only" accept=".pdf,.ppt,.pptx,.doc,.docx,image/*" />
+              <span class="text-lg font-bold">Klik atau seret file ke sini</span>
+              <span class="font-body text-sm text-bark" data-file-name>Belum ada file dipilih</span>
+            </label>
+            <button type="button" class="mt-2 cursor-pointer text-sm font-semibold text-danger underline" data-file-clear hidden>Hapus lampiran</button>
+          </div>
+          <p class="field-error" data-error hidden></p>
+        </div>
+
+        <div class="flex justify-end gap-3 border-t-3 border-ink px-6 py-4">
+          <button type="button" class="btn btn-secondary" data-close>Batal</button>
+          <button class="btn btn-primary">Simpan Materi</button>
+        </div>
+      </form>
+    </template>
+
+    <script type="module" src="/src/js/pages/materi.js"></script>
+  </body>
+</html>

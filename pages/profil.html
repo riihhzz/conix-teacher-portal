@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <script>
+      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
+      addEventListener('load', () => {
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
+        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
+      });
+    </script>
+    <title>Profil Guru · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <h1 class="mt-6 text-5xl font-bold sm:text-[65px]">Profil Guru</h1>
+
+      <!-- Kartu identitas (Figma: Desktop - 3) -->
+      <section class="panel-sun mt-4 flex flex-col items-center gap-5 px-6 py-6 text-center sm:flex-row sm:px-11 sm:text-left">
+        <div class="shrink-0" data-avatar></div>
+        <div class="min-w-0 flex-1">
+          <p class="text-4xl font-bold break-words sm:text-[70px] sm:leading-tight" data-display-name></p>
+          <p class="text-xl sm:text-[26px]">Guru</p>
+          <p class="text-xl break-all sm:text-[26px]" data-display-email></p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <label class="btn btn-primary btn-lg">
+            Ubah Foto
+            <input type="file" accept="image/*" class="sr-only" data-photo-input />
+          </label>
+          <button type="button" class="btn btn-secondary" data-photo-remove hidden>Hapus Foto</button>
+          <button type="button" class="btn btn-secondary text-danger" data-logout>
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></svg>
+            Keluar
+          </button>
+        </div>
+      </section>
+
+      <div class="mt-6 grid gap-8 lg:grid-cols-[1fr_434px]">
+        <section>
+          <div class="flex items-center justify-between gap-4">
+            <h2 class="text-2xl font-bold sm:text-[26px]">Informasi Akun</h2>
+            <button type="button" class="btn btn-sm btn-secondary" data-edit-profile>Edit Profil</button>
+          </div>
+          <dl class="mt-6 grid gap-x-10 gap-y-8 sm:grid-cols-2" data-account-info></dl>
+        </section>
+
+        <section class="panel-sun p-6">
+          <h2 class="text-2xl font-bold">Ringkasan Kelas</h2>
+          <dl class="mt-4 grid grid-cols-2 gap-4" data-summary></dl>
+          <img src="/images/mascot/nomi.png" alt="" class="figure-shadow mx-auto mt-5 h-52 w-auto" />
+        </section>
+      </div>
+    </main>
+
+    <template id="profile-form">
+      <form novalidate class="p-6">
+        <h2 class="text-2xl font-bold">Edit Profil</h2>
+        <div class="mt-4 space-y-4">
+          <div>
+            <label class="label" for="pf-nama">Nama Lengkap</label>
+            <input class="input" id="pf-nama" name="nama" required maxlength="60" />
+          </div>
+          <div>
+            <label class="label" for="pf-panggilan">Nama Panggilan</label>
+            <input class="input" id="pf-panggilan" name="panggilan" required maxlength="30" placeholder="Pak Agus" />
+          </div>
+          <div>
+            <label class="label" for="pf-email">Email</label>
+            <input class="input" id="pf-email" name="email" type="email" required />
+          </div>
+          <p class="field-error" data-error hidden></p>
+        </div>
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" class="btn btn-secondary" data-close>Batal</button>
+          <button class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </template>
+
+    <script type="module" src="/src/js/pages/profil.js"></script>
+  </body>
+</html>

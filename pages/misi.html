@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <script>
+      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
+      addEventListener('load', () => {
+        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
+        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
+      });
+    </script>
+    <title>Manajemen Misi · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <!-- Hero (Figma: Desktop - 4) -->
+      <section class="mt-6 grid gap-6 lg:grid-cols-[1fr_474px]">
+        <div class="panel-sun px-6 py-7 sm:px-9">
+          <h1 class="text-4xl font-bold sm:text-[70px] sm:leading-tight">Manajemen Misi</h1>
+          <p class="mt-1 font-body text-lg sm:text-[22px]">Kelola dan susun misi pembelajaran ekonomi untuk siswa.</p>
+        </div>
+        <div class="panel-sun flex flex-col items-center justify-center gap-3 px-6 py-6 text-center">
+          <p class="text-3xl font-bold sm:text-[50px]">Tambah Misi</p>
+          <a href="misi-editor.html" class="btn btn-primary btn-lg">+Misi Baru</a>
+        </div>
+      </section>
+
+      <div class="mt-8 flex flex-col gap-4 md:flex-row md:items-center">
+        <label class="search">
+          <span class="sr-only">Cari misi</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m20 20-4.5-4.5" /></svg>
+          <input type="search" class="input" placeholder="Search" data-search />
+        </label>
+        <select class="input font-sans font-semibold md:w-52" aria-label="Filter status" data-status-filter>
+          <option value="">Semua status</option>
+          <option value="aktif">Aktif</option>
+          <option value="draft">Draft</option>
+          <option value="nonaktif">Non Aktif</option>
+        </select>
+      </div>
+
+      <div class="table-wrap mt-7">
+        <table class="table-conix min-w-[820px]">
+          <thead>
+            <tr>
+              <th class="w-16">No</th>
+              <th class="text-left!">Judul Misi</th>
+              <th class="w-32">XP</th>
+              <th class="w-28">Petunjuk</th>
+              <th class="w-40">Status</th>
+              <th class="w-60">Aksi</th>
+            </tr>
+          </thead>
+          <tbody data-rows data-stagger></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script type="module" src="/src/js/pages/misi.js"></script>
+  </body>
+</html>
