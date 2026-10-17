@@ -3,6 +3,8 @@
 Website untuk **guru**: upload materi, menyusun misi investigasi ekonomi, dan memantau XP/peringkat siswa.
 Aplikasi mobile CONIX (`../APK/CONNIX/conix_app`) dipakai oleh **murid**.
 
+🌐 **Website:** https://riihhzz.github.io/conix-teacher-portal/
+
 Acuan desain: Figma *Pemograman desain* · Acuan alur: `../DrawIO` (use case, DFD, flow sistem).
 
 ## Teknologi
@@ -21,6 +23,9 @@ npm run dev      # browser otomatis terbuka di http://localhost:5173
 ```
 
 Build produksi: `npm run build` (hasil di `dist/`), cek hasil build dengan `npm run preview`.
+
+**Deploy:** setiap `git push` ke branch `main` otomatis di-build dan dipublikasikan ke GitHub Pages
+(`.github/workflows/deploy.yml`). Progresnya bisa dilihat di tab **Actions** repo.
 
 **Akun demo:** `agus@conix.id` / `guru123` (kelas `AGUS123`, sama dengan data di aplikasi murid).
 
