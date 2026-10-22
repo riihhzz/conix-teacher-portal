@@ -6,25 +6,18 @@
     <meta name="description" content="CONIX Teacher Portal — kelola materi dan misi investigasi ekonomi untuk siswa." />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/src/styles/main.css" />
-    <script>
-      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
-      addEventListener('load', () => {
-        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
-        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
-      });
-    </script>
     <title>Masuk · CONIX Teacher Portal</title>
   </head>
   <body>
-    <main class="page grid min-h-screen max-w-[1400px] items-center gap-10 py-10 lg:grid-cols-2 lg:gap-16">
+    <main class="page grid min-h-screen max-w-350 items-center gap-10 py-10 lg:grid-cols-2 lg:gap-16">
       <!-- Ilustrasi -->
-      <section class="panel-sun relative hidden h-full max-h-[760px] flex-col overflow-hidden p-10 lg:flex">
+      <section class="panel-sun relative hidden h-full max-h-190 flex-col overflow-hidden p-10 lg:flex">
         <img src="/images/brand/logotype.png" alt="CONIX" class="h-16 w-auto self-start" />
         <h1 class="mt-8 text-[56px] leading-tight font-bold">Teacher Portal</h1>
         <p class="mt-3 max-w-md text-xl font-semibold">
           Upload materi, susun misi investigasi ekonomi, dan pantau XP siswa di kelas Anda.
         </p>
-        <img src="/images/mascot/nomi.png" alt="Nomi, maskot detektif CONIX" class="figure-shadow mx-auto mt-auto h-[340px] w-auto" />
+        <img src="/images/mascot/nomi.png" alt="Nomi, maskot detektif CONIX" class="figure-shadow mx-auto mt-auto h-85 w-auto" />
       </section>
 
       <!-- Form -->

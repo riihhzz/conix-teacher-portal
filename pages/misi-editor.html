@@ -5,26 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/src/styles/main.css" />
-    <script>
-      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
-      addEventListener('load', () => {
-        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
-        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
-      });
-    </script>
     <title>Buat Misi · CONIX Teacher Portal</title>
   </head>
   <body>
     <main class="page">
       <hr class="mt-3 border-t-3 border-ink" />
 
-      <!-- Stepper (Figma: Informasi — Petunjuk — Analisis — Publikasi) -->
+      <!-- Stepper (Informasi — Petunjuk — Analisis — Publikasi) -->
       <nav aria-label="Langkah pembuatan misi" class="mt-6 overflow-x-auto pb-1">
         <ol class="mx-auto flex w-max items-center" data-stepper></ol>
       </nav>
 
-      <form novalidate class="mx-auto mt-6 max-w-[1200px]" data-wizard>
-        <!-- LANGKAH 1 · Informasi (Figma: Desktop - 32) -->
+      <form novalidate class="mx-auto mt-6 max-w-300" data-wizard>
+        <!-- LANGKAH 1 · Informasi (Desktop - 32) -->
         <section class="space-y-5" data-step="1">
           <header>
             <h1 class="text-3xl font-bold sm:text-[40px]" data-heading>Buat Misi baru</h1>
@@ -71,7 +64,7 @@
           </div>
         </section>
 
-        <!-- LANGKAH 2 · Petunjuk (Figma: Desktop - 33 / 38) -->
+        <!-- LANGKAH 2 · Petunjuk (Desktop - 33 / 38) -->
         <section data-step="2" hidden>
           <header>
             <h1 class="text-3xl font-bold sm:text-[40px]">Editor Petunjuk</h1>
@@ -79,7 +72,7 @@
           </header>
 
           <div class="mt-5 flex flex-col-reverse gap-8 lg:flex-row lg:justify-between">
-            <div class="w-full space-y-5 lg:max-w-[600px]" data-clue-form>
+            <div class="w-full space-y-5 lg:max-w-150" data-clue-form>
               <div>
                 <label class="label" for="clue-judul">Judul Petunjuk</label>
                 <input class="input" id="clue-judul" maxlength="40" placeholder="Contoh: Tiket" data-field="judul" />
@@ -124,15 +117,15 @@
               </div>
             </div>
 
-            <div role="tablist" aria-label="Pilih petunjuk" class="flex gap-3 lg:w-[224px] lg:flex-col lg:pt-16" data-clue-tabs></div>
+            <div role="tablist" aria-label="Pilih petunjuk" class="flex gap-3 lg:w-56 lg:flex-col lg:pt-16" data-clue-tabs></div>
           </div>
         </section>
 
-        <!-- LANGKAH 3 · Analisis (Figma: Desktop - 41) -->
+        <!-- LANGKAH 3 · Analisis (FDesktop - 41) -->
         <section data-step="3" hidden>
           <header>
             <h1 class="text-3xl font-bold sm:text-[40px]">Editor Analisis</h1>
-            <p class="max-w-[780px] font-body text-lg sm:text-[22px]">
+            <p class="max-w-195 font-body text-lg sm:text-[22px]">
               Tentukan kartu yang tersedia bagi siswa dan susunan hubungan yang menjadi kunci jawaban.
             </p>
           </header>
@@ -161,7 +154,7 @@
           </div>
         </section>
 
-        <!-- LANGKAH 4 · Publikasi / Pratinjau (Figma: Desktop - 42) -->
+        <!-- LANGKAH 4 · Publikasi / Pratinjau (Desktop - 42) -->
         <section data-step="4" hidden>
           <h1 class="text-3xl font-bold sm:text-[40px]">Pratinjau Misi</h1>
           <p class="font-body text-lg">Begini tampilan misi di aplikasi siswa. Periksa sebelum dipublikasikan.</p>

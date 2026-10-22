@@ -24,7 +24,7 @@ const ICONS = {
 };
 
 function render() {
-  $('[data-avatar]').innerHTML = avatar(user, 'size-[164px] border-4 shadow-card');
+  $('[data-avatar]').innerHTML = avatar(user, 'size-41 border-4 shadow-card');
   $('[data-display-name]').textContent = user.panggilan || user.nama;
   $('[data-display-email]').textContent = user.email;
   $('[data-photo-remove]').hidden = !user.foto;

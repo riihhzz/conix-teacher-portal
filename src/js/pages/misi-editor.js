@@ -68,7 +68,7 @@ if (misi.id) {
 function renderStepper() {
   $('[data-stepper]').innerHTML = STEPS.map(
     (label, i) => `
-      ${i ? '<li aria-hidden="true" class="mx-1 h-[7px] w-6 rounded-full bg-ink sm:w-10"></li>' : ''}
+      ${i ? '<li aria-hidden="true" class="mx-1 h-1.75 w-6 rounded-full bg-ink sm:w-10"></li>' : ''}
       <li>
         <button type="button" data-goto="${i + 1}" ${i + 1 === step ? 'aria-current="step"' : ''}
           class="flex cursor-pointer items-center gap-2 rounded-full pr-2 text-base font-semibold sm:gap-3 sm:text-[22px]">
@@ -100,7 +100,7 @@ function renderPhoto(fileName) {
 function renderBadges() {
   $('[data-badge-list]').innerHTML = LENCANA.map(
     (l) => `
-    <label class="grid size-24 cursor-pointer place-items-center rounded-[16px] border-3 border-ink bg-white shadow-soft transition hover:-translate-y-0.5 has-checked:border-brand has-checked:bg-sun-light has-checked:ring-4 has-checked:ring-brand/30">
+    <label class="grid size-24 cursor-pointer place-items-center rounded-2xl border-3 border-ink bg-white shadow-soft transition hover:-translate-y-0.5 has-checked:border-brand has-checked:bg-sun-light has-checked:ring-4 has-checked:ring-brand/30">
       <input type="radio" name="badge" value="${l.id}" class="sr-only" ${misi.lencana.gambar === l.id ? 'checked' : ''} />
       <img src="${l.src}" alt="${l.label}" class="size-20 object-contain" />
     </label>`,
@@ -172,7 +172,7 @@ function renderIcons() {
   const current = misi.petunjuk[activeClue].ikon;
   $('[data-icon-list]').innerHTML = IKON_PETUNJUK.map(
     (ik) => `
-    <label title="${ik.label}" class="grid size-16 cursor-pointer place-items-center rounded-[12px] border-2 border-transparent bg-paper transition hover:border-ink has-checked:border-brand has-checked:bg-sun-light has-checked:ring-2 has-checked:ring-brand">
+    <label title="${ik.label}" class="grid size-16 cursor-pointer place-items-center rounded-xl border-2 border-transparent bg-paper transition hover:border-ink has-checked:border-brand has-checked:bg-sun-light has-checked:ring-2 has-checked:ring-brand">
       <input type="radio" name="clue-icon" value="${ik.id}" class="sr-only" ${ik.id === current ? 'checked' : ''} />
       <img src="${ik.src}" alt="${ik.label}" class="size-12 object-contain" />
     </label>`,
@@ -345,12 +345,12 @@ function cluePreview(clue, total) {
 function renderPreview() {
   const clues = filledClues();
   previewIndex = Math.min(previewIndex, Math.max(0, clues.length - 1));
-  const miniSlot = (i) => `<span class="slot min-h-11 rounded-[16px] border-[3px] text-base sm:text-lg">${esc(misi.analisis.kunci[i]) || '—'}</span>`;
+  const miniSlot = (i) => `<span class="slot min-h-11 rounded-2xl border-[3px] text-base sm:text-lg">${esc(misi.analisis.kunci[i]) || '—'}</span>`;
 
   $('[data-preview]').innerHTML = `
     <article class="${previewCard} text-center">
       <h2 class="text-2xl font-bold sm:text-[34px]">${esc(misi.judul) || 'Judul misi'}</h2>
-      <div class="mx-auto mt-4 grid size-36 place-items-center overflow-hidden rounded-[12px] border-2 border-ink bg-linear-to-b from-sun to-sun-light shadow-card">
+      <div class="mx-auto mt-4 grid size-36 place-items-center overflow-hidden rounded-xl border-2 border-ink bg-linear-to-b from-sun to-sun-light shadow-card">
         <img src="${misi.foto || ikonSrc(misi.petunjuk[0].ikon)}" alt="" class="${misi.foto ? 'size-full object-cover' : 'size-28 object-contain'}" />
       </div>
       <p class="mt-4 rounded-[23px] border-4 border-ink px-4 py-3 text-left font-body">${esc(misi.deskripsi) || 'Deskripsi kasus...'}</p>
@@ -368,7 +368,7 @@ function renderPreview() {
     <article class="${previewCard}">
       <h2 class="text-center text-2xl font-bold sm:text-[34px]">Apa yang terjadi</h2>
       <div class="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">${slotGrid(miniSlot, 'h-6')}</div>
-      ${misi.analisis.penjelasan ? `<p class="mt-5 rounded-[16px] bg-paper p-3 font-body text-sm text-bark">💡 ${esc(misi.analisis.penjelasan)}</p>` : ''}
+      ${misi.analisis.penjelasan ? `<p class="mt-5 rounded-2xl bg-paper p-3 font-body text-sm text-bark">💡 ${esc(misi.analisis.penjelasan)}</p>` : ''}
     </article>
 
     <article class="${previewCard}">

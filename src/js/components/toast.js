@@ -3,7 +3,7 @@ let container;
 function ensureContainer() {
   if (container) return container;
   container = document.createElement('div');
-  container.className = 'pointer-events-none fixed inset-x-0 bottom-6 z-[70] flex flex-col items-center gap-2 px-4';
+  container.className = 'pointer-events-none fixed inset-x-0 bottom-6 z-70 flex flex-col items-center gap-2 px-4';
   container.setAttribute('role', 'status');
   container.setAttribute('aria-live', 'polite');
   document.body.append(container);

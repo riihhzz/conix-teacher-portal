@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/src/styles/main.css" />
-    <script>
-      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
-      addEventListener('load', () => {
-        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
-        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
-      });
-    </script>
     <title>Materi · CONIX Teacher Portal</title>
   </head>
   <body>
@@ -30,7 +23,7 @@
         </div>
       </section>
 
-      <!-- Kategori (Figma: Group 55 / 57) -->
+      <!-- Kategori-->
       <h2 class="mt-10 text-2xl font-bold sm:text-[26px]">Kategori Materi</h2>
       <section class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-[326px_326px]" data-categories data-stagger></section>
 

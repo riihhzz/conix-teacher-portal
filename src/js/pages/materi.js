@@ -25,7 +25,7 @@ function renderCategories() {
     (k, i) => `
     <button style="--i:${i}" type="button" data-category="${k.id}" aria-pressed="${activeFilter === k.id}"
       class="panel-sun flex cursor-pointer flex-col items-center px-5 py-5 text-center transition hover:-translate-y-1 aria-pressed:ring-4 aria-pressed:ring-brand">
-      <img src="${k.ikon}" alt="" class="size-[110px] object-contain" />
+      <img src="${k.ikon}" alt="" class="size-27.5 object-contain" />
       <span class="mt-2 text-[26px] font-bold">${k.nama}</span>
       <span class="mt-1 font-body text-lg text-bark">${k.deskripsi}</span>
       <span class="mt-3 rounded-full border-2 border-ink bg-cream px-3 py-0.5 text-sm font-bold">
@@ -40,7 +40,7 @@ function materiCard(m, i) {
   return `
     <li style="--i:${i}" class="card flex flex-col p-5 transition hover:-translate-y-1 hover:shadow-card">
       <div class="flex items-start gap-4">
-        <span class="grid size-16 shrink-0 place-items-center rounded-[12px] border-2 border-ink bg-linear-to-b from-sun to-sun-light">
+        <span class="grid size-16 shrink-0 place-items-center rounded-xl border-2 border-ink bg-linear-to-b from-sun to-sun-light">
           <img src="${k.ikon}" alt="" class="size-12 object-contain" />
         </span>
         <div class="min-w-0 flex-1">

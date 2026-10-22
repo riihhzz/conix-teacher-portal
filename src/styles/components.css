@@ -159,7 +159,7 @@
   /* ---------- Misi: analisis ---------- */
   /* Kartu pilihan (Penawaran, Naik, ...) */
   .chip-card {
-    @apply inline-flex min-w-32 cursor-pointer items-center justify-center rounded-[12px] border-3 border-bark bg-linear-to-b from-honey to-honey-light px-4 py-2 text-lg font-bold text-ink shadow-chip transition hover:-translate-y-0.5;
+    @apply inline-flex min-w-32 cursor-pointer items-center justify-center rounded-xl border-3 border-bark bg-linear-to-b from-honey to-honey-light px-4 py-2 text-lg font-bold text-ink shadow-chip transition hover:-translate-y-0.5;
   }
   /* Slot jawaban (border oranye) */
   .slot {

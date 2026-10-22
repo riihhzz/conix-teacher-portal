@@ -61,7 +61,7 @@ function headerTemplate(user) {
         </button>
 
         <div id="user-menu" role="menu" hidden data-user-dropdown
-          class="dropdown absolute right-0 mt-2 w-60 overflow-hidden rounded-[16px] border-3 border-ink bg-cream shadow-card">
+          class="dropdown absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border-3 border-ink bg-cream shadow-card">
           <div class="flex items-center gap-3 border-b-2 border-ink/15 px-4 py-3">
             ${avatar(user, 'size-10')}
             <div class="min-w-0">

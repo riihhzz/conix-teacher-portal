@@ -5,20 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/src/styles/main.css" />
-    <script>
-      /* Tampilkan petunjuk bila halaman dibuka tanpa Vite (Live Server / klik 2x): Tailwind tidak terproses. */
-      addEventListener('load', () => {
-        if (getComputedStyle(document.documentElement).getPropertyValue('--color-cream').trim()) return;
-        document.body.innerHTML = '<div style="font:16px/1.6 system-ui;max-width:540px;margin:10vh auto;padding:28px;border:3px solid #3a1f15;border-radius:18px;background:#fdf3dd;color:#3a1f15"><h1 style="margin:0 0 8px;font-size:22px">Jalankan website dengan Vite</h1><p>Website ini memakai Tailwind CSS yang diproses Vite, jadi tidak bisa dibuka lewat Live Server / klik dua kali.</p><p>Buka terminal di folder <b>Web</b> lalu jalankan:</p><pre style="background:#3a1f15;color:#fdf3dd;padding:12px;border-radius:10px">npm install<br>npm run dev</pre><p>Browser terbuka otomatis di <b>http://localhost:5173</b>.</p></div>';
-      });
-    </script>
     <title>Beranda · CONIX Teacher Portal</title>
   </head>
   <body>
     <main class="page">
       <!-- Hero (Figma: Desktop - 1) -->
-      <section class="panel-sun relative mt-6 px-6 py-8 sm:px-10 md:mt-16 lg:min-h-[381px] lg:py-7">
-        <div class="relative z-10 max-w-[720px]">
+      <section class="panel-sun relative mt-6 px-6 py-8 sm:px-10 md:mt-16 lg:min-h-95.25 lg:py-7">
+        <div class="relative z-10 max-w-180">
           <h1 class="text-4xl leading-tight font-bold sm:text-6xl lg:text-[70px]">Selamat datang di CONIX!</h1>
           <p class="mt-4 text-lg font-bold sm:text-[26px]">
             Halo, <span data-user-name>Guru</span>! Selamat datang di teacher portal CONIX.
@@ -29,7 +22,7 @@
           </div>
         </div>
         <img src="/images/mascot/nomi.png" alt="" aria-hidden="true"
-          class="figure-shadow pointer-events-none absolute right-4 -bottom-[52px] hidden h-[calc(100%+121px)] w-auto md:block lg:right-[110px]" />
+          class="figure-shadow pointer-events-none absolute right-4 -bottom-13 hidden h-[calc(100%+121px)] w-auto md:block lg:right-27.5" />
       </section>
 
       <!-- Statistik -->
