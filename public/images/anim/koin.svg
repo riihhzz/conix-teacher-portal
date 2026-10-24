@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -42 148 184" width="148" height="184">
+  <!-- Koin Rupiah: ancang-ancang, melompat sambil berguling 2D, mendarat memipih, berkedip -->
+  <style>
+    .hop { transform-box: view-box; transform-origin: 60px 116px; animation: hop 3.2s infinite; }
+    .roll { transform-box: view-box; transform-origin: 60px 70px; animation: roll 3.2s infinite; }
+    .shadow { transform-box: view-box; transform-origin: 60px 128px; animation: shadow 3.2s infinite; }
+    .eyes { transform-box: view-box; transform-origin: 60px 58px; animation: blink 4.1s infinite; }
+    .shine { animation: shine 3.2s infinite; }
+    @keyframes hop {
+      0%, 34% { transform: none; animation-timing-function: ease-in-out; }
+      44% { transform: scale(1.14, .84); animation-timing-function: cubic-bezier(.2,.7,.3,1); }
+      54% { transform: translateY(-34px) scale(.88, 1.14); animation-timing-function: ease-out; }
+      64% { transform: translateY(-48px) scale(1, 1); animation-timing-function: ease-in; }
+      75% { transform: translateY(-4px) scale(.92, 1.1); animation-timing-function: linear; }
+      78% { transform: scale(1.18, .8); animation-timing-function: ease-out; }
+      86% { transform: translateY(-5px) scale(.95, 1.06); animation-timing-function: ease-in-out; }
+      93% { transform: scale(1.03, .97); animation-timing-function: ease-in-out; }
+      100% { transform: none; }
+    }
+    @keyframes roll {
+      0%, 50% { transform: rotate(0); animation-timing-function: cubic-bezier(.4,0,.2,1); }
+      76% { transform: rotate(372deg); animation-timing-function: ease-out; }
+      86%, 100% { transform: rotate(360deg); }
+    }
+    @keyframes shadow {
+      0%, 34%, 100% { transform: scale(1); opacity: .2; }
+      44% { transform: scale(1.15); opacity: .24; }
+      64% { transform: scale(.5); opacity: .08; animation-timing-function: ease-in; }
+      78% { transform: scale(1.2); opacity: .26; }
+    }
+    @keyframes blink {
+      0%, 88%, 100% { transform: scaleY(1); }
+      91% { transform: scaleY(.1); }
+      94% { transform: scaleY(1); }
+    }
+    @keyframes shine {
+      0%, 78% { transform: translateX(-100px); }
+      100% { transform: translateX(100px); }
+    }
+  </style>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffde7d"/><stop offset="1" stop-color="#f5a623"/>
+    </linearGradient>
+    <clipPath id="c"><circle cx="60" cy="66" r="42"/></clipPath>
+  </defs>
+  <ellipse class="shadow" cx="60" cy="128" rx="30" ry="6" fill="#3a1f15"/>
+  <g class="hop">
+    <g class="roll">
+      <circle cx="60" cy="72" r="46" fill="#e08a12" stroke="#3a1f15" stroke-width="4"/>
+      <circle cx="60" cy="66" r="44" fill="url(#g)" stroke="#3a1f15" stroke-width="4"/>
+      <circle cx="60" cy="66" r="34" fill="none" stroke="#c97a0c" stroke-width="3" stroke-dasharray="4 5"/>
+      <g class="eyes" fill="#3a1f15">
+        <ellipse cx="47" cy="58" rx="5" ry="7"/><ellipse cx="73" cy="58" rx="5" ry="7"/>
+        <circle cx="49" cy="55" r="2" fill="#fff"/><circle cx="75" cy="55" r="2" fill="#fff"/>
+      </g>
+      <ellipse cx="36" cy="70" rx="6" ry="4" fill="#ff8a6b" opacity=".6"/>
+      <ellipse cx="84" cy="70" rx="6" ry="4" fill="#ff8a6b" opacity=".6"/>
+      <text x="60" y="90" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="20" fill="#3a1f15">Rp</text>
+      <g clip-path="url(#c)"><rect class="shine" x="40" y="0" width="16" height="150" fill="#fff" opacity=".6" transform="rotate(20 60 66)"/></g>
+    </g>
+  </g>
+</svg>

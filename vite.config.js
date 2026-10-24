@@ -22,7 +22,9 @@ export default defineConfig(({ command, isPreview }) => ({
   build: {
     rollupOptions: {
       input: {
-        login: resolve(root, 'index.html'),
+        landing: resolve(root, 'index.html'),
+        login: resolve(root, 'auth/login.html'),
+        register: resolve(root, 'auth/register.html'),
         ...Object.fromEntries(pages.map((p) => [p, resolve(root, `pages/${p}.html`)])),
       },
     },

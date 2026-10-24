@@ -8,7 +8,9 @@ export const BASE = import.meta.env.BASE_URL;
 export const asset = (path) => BASE + path.replace(/^\//, '');
 
 export const ROUTES = {
-  login: asset('/index.html'),
+  landing: asset('/index.html'),
+  login: asset('/auth/login.html'),
+  register: asset('/auth/register.html'),
   dashboard: asset('/pages/dashboard.html'),
   materi: asset('/pages/materi.html'),
   misi: asset('/pages/misi.html'),
@@ -16,6 +18,9 @@ export const ROUTES = {
   siswa: asset('/pages/siswa.html'),
   profil: asset('/pages/profil.html'),
 };
+
+/** Link unduh aplikasi murid (APK). Kosong = tombol tampil sebagai "Segera hadir". */
+export const APP_DOWNLOAD_URL = '';
 
 export const IMG = {
   logotype: asset('/images/brand/logotype.png'),

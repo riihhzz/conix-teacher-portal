@@ -33,8 +33,11 @@ Build produksi: `npm run build` (hasil di `dist/`), cek hasil build dengan `npm 
 
 ```
 Web/
-├── index.html                  # Halaman login / daftar guru
-├── pages/                      # Halaman setelah login
+├── index.html                  # Landing page publik: Beranda, Fitur, Tentang, Tim (animasi)
+├── auth/                       # Halaman publik untuk akun guru
+│   ├── login.html              #   Masuk
+│   └── register.html           #   Daftar
+├── pages/                      # Halaman setelah login (authenticated)
 │   ├── dashboard.html          #   Beranda: statistik, misi kelas, kode kelas
 │   ├── materi.html             #   Upload & kelola materi           (DFD 2.0)
 │   ├── misi.html               #   Manajemen misi                   (DFD 3.0)
@@ -45,7 +48,11 @@ Web/
 │   ├── favicon.png
 │   └── images/
 │       ├── brand/              #   logotype, logo
-│       ├── mascot/             #   Nomi (maskot) & versi sedih
+│       ├── mascot/             #   Nomi versi gambar utuh (dipakai di ikon kecil)
+│       ├── nomi/               #   Nomi per bagian (tubuh + ekspresi/) dari tim aset, untuk animasi
+│       ├── anim/               #   ilustrasi SVG 2D beranimasi (koin, kaca pembesar, bohlam, ...)
+│       ├── partners/           #   logo UPI & Pendidikan Multimedia (footer)
+│       ├── team/               #   foto anggota tim
 │       ├── nav/                #   ikon menu sidebar
 │       ├── topics/             #   ikon Permintaan / Penawaran
 │       ├── clues/              #   ikon petunjuk misi (tiket, harga, stok, ...)
@@ -57,14 +64,16 @@ Web/
 │   │   ├── main.css            # entry: font + tailwind + partial di bawah
 │   │   ├── theme.css           # design token (warna, font, shadow)
 │   │   ├── base.css            # style dasar elemen
-│   │   └── components.css      # komponen: .btn, .card, .panel-sun, .badge, .slot, ...
+│   │   ├── components.css      # komponen: .btn, .card, .panel-sun, .badge, .slot, ...
+│   │   ├── landing.css         # halaman publik: tombol chunky 3D, animasi melayang & scroll
+│   │   └── nomi.css            # gerakan maskot Nomi (bernapas, mengangguk, melompat)
 │   └── js/
-│       ├── config/constants.js # route, kategori, ikon, lencana, kartu analisis
+│       ├── config/constants.js # route, kategori, ikon, lencana, kartu analisis, link APK
 │       ├── data/               # seed.js (data contoh) & storage.js (localStorage)
 │       ├── services/           # auth, materi, misi, siswa (lapisan akses data)
-│       ├── components/         # app-shell (header+sidebar), modal, toast, ui
+│       ├── components/         # app-shell (header+sidebar), auth-form, nomi (maskot hidup), modal, toast, ui
 │       ├── utils/              # dom, format, file
-│       └── pages/              # logika per halaman
+│       └── pages/              # logika per halaman (landing, login, register, dashboard, ...)
 ├── vite.config.js
 └── package.json
 ```

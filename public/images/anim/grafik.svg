@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="240" height="180">
+  <!-- Papan grafik harga: batang tumbuh, garis tergambar, panah naik (loop) -->
+  <style>
+    .bar { transform-box: fill-box; transform-origin: bottom; animation: grow 5s infinite; }
+    .b2 { animation-delay: .15s; } .b3 { animation-delay: .3s; } .b4 { animation-delay: .45s; }
+    .line { stroke-dasharray: 260; animation: draw 5s ease-in-out infinite; }
+    .arrow { transform-box: fill-box; transform-origin: center; animation: pop 5s ease-in-out infinite; }
+    .dot { transform-box: fill-box; transform-origin: center; animation: blink 5s ease-in-out infinite; }
+    /* tumbuh dengan pantulan; menyusut tanpa pantulan agar tidak menembus garis sumbu */
+    @keyframes grow {
+      0%,8% { transform: scaleY(0); animation-timing-function: cubic-bezier(.34,1.56,.64,1); }
+      30%,85% { transform: scaleY(1); animation-timing-function: cubic-bezier(.5,0,.75,0); }
+      100% { transform: scaleY(0); }
+    }
+    @keyframes draw { 0%,25% { stroke-dashoffset: 260; } 55%,85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 260; } }
+    @keyframes pop { 0%,52% { opacity: 0; transform: translate(-6px,6px) scale(.3); } 62% { opacity: 1; transform: translate(2px,-3px) scale(1.15); } 70%,85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+    @keyframes blink { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+  </style>
+  <rect x="6" y="6" width="228" height="160" rx="18" fill="#fefaf1" stroke="#3a1f15" stroke-width="5"/>
+  <circle class="dot" cx="26" cy="24" r="5" fill="#ff5a4e"/><circle class="dot" cx="42" cy="24" r="5" fill="#fbc045" style="animation-delay:.3s"/><circle class="dot" cx="58" cy="24" r="5" fill="#30c000" style="animation-delay:.6s"/>
+  <path d="M30 145 H210 M30 145 V40" stroke="#3a1f15" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <rect class="bar" x="48" y="112" width="24" height="33" rx="5" fill="#fddd96" stroke="#3a1f15" stroke-width="3.5"/>
+  <rect class="bar b2" x="86" y="95" width="24" height="50" rx="5" fill="#fbc045" stroke="#3a1f15" stroke-width="3.5"/>
+  <rect class="bar b3" x="124" y="78" width="24" height="67" rx="5" fill="#fbb931" stroke="#3a1f15" stroke-width="3.5"/>
+  <rect class="bar b4" x="162" y="55" width="24" height="90" rx="5" fill="#f46c0c" stroke="#3a1f15" stroke-width="3.5"/>
+  <polyline class="line" points="44,110 82,96 120,80 158,70 200,44" fill="none" stroke="#3a1f15" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g class="arrow"><path d="M190 40 L212 34 L206 56 Z" fill="#f46c0c" stroke="#3a1f15" stroke-width="3.5" stroke-linejoin="round"/></g>
+</svg>

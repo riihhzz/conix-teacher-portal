@@ -3,110 +3,416 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="CONIX Teacher Portal — kelola materi dan misi investigasi ekonomi untuk siswa." />
+    <meta name="description" content="CONIX — belajar ekonomi seru dengan menjadi detektif. Guru menyusun misi investigasi, murid memecahkannya lewat aplikasi CONIX." />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" href="/src/styles/main.css" />
-    <title>Masuk · CONIX Teacher Portal</title>
+    <script>document.documentElement.classList.add('js');</script>
+    <title>CONIX · Belajar Ekonomi Jadi Detektif</title>
   </head>
-  <body>
-    <main class="page grid min-h-screen max-w-350 items-center gap-10 py-10 lg:grid-cols-2 lg:gap-16">
-      <!-- Ilustrasi -->
-      <section class="panel-sun relative hidden h-full max-h-190 flex-col overflow-hidden p-10 lg:flex">
-        <img src="/images/brand/logotype.png" alt="CONIX" class="h-16 w-auto self-start" />
-        <h1 class="mt-8 text-[56px] leading-tight font-bold">Teacher Portal</h1>
-        <p class="mt-3 max-w-md text-xl font-semibold">
-          Upload materi, susun misi investigasi ekonomi, dan pantau XP siswa di kelas Anda.
-        </p>
-        <img src="/images/mascot/nomi.png" alt="Nomi, maskot detektif CONIX" class="figure-shadow mx-auto mt-auto h-85 w-auto" />
-      </section>
+  <body class="overflow-x-hidden">
+    <!-- ============================ HEADER ============================ -->
+    <header class="public-header" data-header>
+      <div class="page flex items-center gap-3 py-3 pb-3">
+        <a href="#beranda" aria-label="CONIX — Beranda" class="mr-2 transition hover:scale-[1.03]">
+          <img src="/images/brand/logotype.png" alt="CONIX" class="h-10 w-auto sm:h-12" />
+        </a>
+        <nav aria-label="Navigasi halaman" class="hidden items-center gap-1 md:flex" data-nav>
+          <a href="#beranda" class="nav-link">Beranda</a>
+          <a href="#fitur" class="nav-link">Fitur</a>
+          <a href="#tentang" class="nav-link">Tentang</a>
+          <a href="#tim" class="nav-link">Tim</a>
+        </nav>
+        <div class="ml-auto flex items-center gap-3" data-guest-only>
+          <a href="auth/login.html" class="hidden font-extrabold tracking-wide text-ink uppercase hover:text-brand sm:inline">Masuk</a>
+          <a href="auth/register.html" class="btn-chunky btn-chunky-brand btn-chunky-sm header-cta" data-header-cta>Daftar Gratis</a>
+        </div>
+        <a href="pages/dashboard.html" class="btn-chunky btn-chunky-brand btn-chunky-sm ml-auto" data-user-only hidden>Buka Dashboard</a>
+        <button type="button" class="btn-icon size-11 md:hidden" aria-label="Buka menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+          <img src="/images/icons/menu.svg" alt="" class="h-6 w-8" />
+        </button>
+      </div>
+      <nav id="mobile-menu" aria-label="Menu" class="page hidden flex-col gap-1 pb-4 md:hidden" data-mobile-menu>
+        <a href="#beranda" class="nav-link">Beranda</a>
+        <a href="#fitur" class="nav-link">Fitur</a>
+        <a href="#tentang" class="nav-link">Tentang</a>
+        <a href="#tim" class="nav-link">Tim</a>
+        <a href="auth/login.html" class="nav-link" data-guest-only>Masuk</a>
+      </nav>
+    </header>
 
-      <!-- Form -->
-      <section class="mx-auto w-full max-w-md">
-        <img src="/images/brand/logotype.png" alt="CONIX" class="mx-auto mb-6 h-14 w-auto lg:hidden" />
+    <main class="overflow-x-clip">
+      <!-- ============================ HERO ============================ -->
+      <section id="beranda" class="relative">
+        <!-- Lapisan parallax di latar (bergerak lebih lambat/cepat dari halaman) -->
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+          <div class="blob top-[8%] left-[-6%] size-72 bg-sun/35" data-parallax="-0.25"></div>
+          <div class="blob right-[-8%] bottom-[2%] size-96 bg-honey/30" data-parallax="-0.4"></div>
+          <div class="blob top-[16%] right-[30%] size-24 bg-brand/15" data-parallax="0.35"></div>
+          <img src="/images/anim/kilau.svg" alt="" class="absolute top-[12%] left-[46%] w-10" data-parallax="0.3" />
+          <img src="/images/anim/kilau.svg" alt="" class="absolute right-[6%] bottom-[22%] w-8" data-parallax="0.45" />
+        </div>
 
-        <p role="status" class="mb-4 flex items-center gap-3 rounded-[14px] border-3 border-ink bg-sun-light px-4 py-3 font-semibold" data-notice hidden>
-          <img src="/images/mascot/nomi.png" alt="" class="h-10 w-auto" />
-          <span data-notice-text></span>
-        </p>
+        <div class="page relative grid min-h-[calc(100svh-150px)] items-center gap-10 py-10 lg:grid-cols-2 lg:py-6">
+          <!-- Adegan 2D: Nomi melompat & berganti pose, properti bergerak mengikuti mouse -->
+          <div class="relative mx-auto aspect-square w-full max-w-140" aria-hidden="true" data-hero-scene data-nomi-stage>
+            <div class="pop-spring absolute inset-[12%] rounded-full border-3 border-ink bg-linear-to-b from-sun to-sun-light shadow-card" style="--in: 0s" data-depth="6"></div>
+            <div class="spin-slow absolute inset-[6%] rounded-full border-3 border-dashed border-ink/25" style="--dur: 60s"></div>
 
-        <div class="rounded-[23px] border-4 border-ink bg-cream p-6 shadow-soft sm:p-8">
-          <div role="tablist" aria-label="Masuk atau daftar" class="relative mb-6 grid grid-cols-2 rounded-[14px] border-3 border-ink bg-paper p-1">
-            <span aria-hidden="true" class="tab-indicator absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-[10px] bg-brand transition-transform duration-300 ease-out" data-tab-indicator></span>
-            <button type="button" role="tab" id="tab-login" aria-controls="form-login" aria-selected="true" data-tab="login"
-              class="relative cursor-pointer rounded-[10px] py-2 text-lg font-bold transition-colors aria-selected:text-cream">
-              Masuk
-            </button>
-            <button type="button" role="tab" id="tab-register" aria-controls="form-register" aria-selected="false" data-tab="register"
-              class="relative cursor-pointer rounded-[10px] py-2 text-lg font-bold transition-colors aria-selected:text-cream">
-              Daftar
-            </button>
+            <!-- Nomi: rig 2D hidup (src/js/components/nomi.js) — klik untuk bereaksi -->
+            <div class="scatter absolute top-[8%] left-[24%] w-[52%]" style="--in: 0.15s" data-depth="14">
+              <div data-nomi-rig data-mood="normal" data-scene="sapa" data-hero-nomi role="img" aria-label="Nomi, maskot detektif CONIX"></div>
+            </div>
+
+            <!-- Properti animasi 2D -->
+            <div class="scatter absolute top-[0%] left-[1%] w-[28%]" style="--in: 0.4s; --fx: 150px; --fy: 170px" data-depth="-22" data-poke>
+              <img src="/images/anim/kaca-pembesar.svg" alt="" class="w-full" />
+            </div>
+            <div class="scatter absolute top-[0%] right-[0%] w-[30%]" style="--in: 0.5s; --fx: -140px; --fy: 180px" data-depth="-30" data-poke>
+              <img src="/images/anim/label-harga.svg" alt="" class="w-full" />
+            </div>
+            <div class="scatter absolute top-[44%] left-[-3%] w-[17%]" style="--in: 0.6s; --fx: 180px; --fy: 0px" data-depth="26" data-poke>
+              <img src="/images/clues/tiket.png" alt="" class="float wiggle-hover w-full" style="--r: -8deg; --dur: 4.6s" />
+            </div>
+            <div class="scatter absolute top-[36%] right-[-7%] w-[22%]" style="--in: 0.7s; --fx: -180px; --fy: 10px" data-depth="-18" data-poke>
+              <img src="/images/anim/koin.svg" alt="" class="w-full" />
+            </div>
+            <div class="scatter absolute bottom-[2%] left-[8%] w-[17%]" style="--in: 0.8s; --fx: 140px; --fy: -160px" data-depth="20" data-poke>
+              <img src="/images/clues/stok.png" alt="" class="float wiggle-hover w-full" style="--r: 6deg; --dur: 5s; --delay: -2s" />
+            </div>
+            <div class="scatter absolute right-[8%] bottom-[0%] w-[19%]" style="--in: 0.9s; --fx: -140px; --fy: -170px" data-depth="-24" data-poke>
+              <img src="/images/badges/lencana-1.png" alt="" class="float wiggle-hover w-full" style="--r: -7deg; --dur: 4.4s; --delay: -1.5s" />
+            </div>
+            <div class="absolute top-[3%] left-[56%] w-[20%]" data-depth="-10">
+              <img src="/images/anim/tanya.svg" alt="" class="w-full" />
+            </div>
           </div>
 
-          <!-- Masuk -->
-          <form id="form-login" role="tabpanel" aria-labelledby="tab-login" data-form="login" novalidate class="space-y-4">
-            <header>
-              <h1 class="text-2xl font-bold">Selamat datang kembali!</h1>
-              <p class="font-body text-bark">Masuk untuk mengelola materi dan misi kelas Anda.</p>
-            </header>
-            <div>
-              <label class="label" for="login-email">Email</label>
-              <input class="input" id="login-email" name="email" type="email" autocomplete="email" required placeholder="nama@sekolah.sch.id" />
-            </div>
-            <div>
-              <label class="label" for="login-password">Password</label>
-              <div class="relative">
-                <input class="input pr-14" id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••" />
-                <button type="button" class="btn-icon absolute top-1/2 right-2 -translate-y-1/2" data-toggle-password aria-label="Tampilkan password"><svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              </div>
-            </div>
-            <p class="field-error" data-error hidden></p>
-            <button class="btn btn-primary btn-lg w-full">Masuk</button>
-            <p class="text-center font-body">
-              Belum punya akun?
-              <a href="#daftar" class="font-sans font-bold text-brand underline-offset-4 hover:underline" data-switch="register">Daftar sekarang</a>
+          <!-- Teks + tombol -->
+          <div class="text-center lg:text-left">
+            <h1 class="pop-spring text-4xl leading-tight font-extrabold sm:text-5xl lg:text-[56px]" style="--in: 0.2s">
+              Cara paling seru belajar ekonomi: <span class="text-brand">jadi detektif!</span>
+            </h1>
+            <p class="pop-spring mx-auto mt-4 max-w-xl font-body text-lg text-bark lg:mx-0" style="--in: 0.35s">
+              Guru menyusun misi investigasi, murid memecahkan misteri harga, permintaan, dan penawaran lewat aplikasi CONIX.
             </p>
-            <p class="rounded-xl border-2 border-dashed border-ink/40 bg-paper p-3 font-body text-sm text-bark">
-              Akun demo: <b>agus@conix.id</b> / <b>guru123</b>
-            </p>
-          </form>
+            <div class="pop-spring mx-auto mt-8 flex max-w-sm flex-col gap-4 lg:mx-0" style="--in: 0.5s" data-hero-cta>
+              <a href="auth/register.html" class="btn-chunky btn-chunky-brand py-3.5" data-guest-only>Mulai sekarang — gratis</a>
+              <a href="auth/login.html" class="btn-chunky btn-chunky-light py-3.5" data-guest-only>Saya sudah punya akun</a>
+              <a href="pages/dashboard.html" class="btn-chunky btn-chunky-brand py-3.5" data-user-only hidden>Lanjut ke Dashboard</a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <!-- Daftar -->
-          <form id="form-register" role="tabpanel" aria-labelledby="tab-register" data-form="register" novalidate class="space-y-4" hidden>
-            <header>
-              <h1 class="text-2xl font-bold">Buat akun guru</h1>
-              <p class="font-body text-bark">Kelas baru dan kode kelas dibuat otomatis untuk Anda.</p>
-            </header>
-            <div>
-              <label class="label" for="reg-nama">Nama Lengkap</label>
-              <input class="input" id="reg-nama" name="nama" autocomplete="name" required minlength="3" maxlength="60" placeholder="Agus Juhana" />
+      <!-- Pita berjalan: misi-misi CONIX -->
+      <div class="relative overflow-hidden border-y-3 border-ink bg-brand py-3 text-cream" aria-label="Contoh misi">
+        <div class="marquee" data-marquee>
+          <div class="flex shrink-0 items-center gap-10 pr-10 text-lg font-extrabold tracking-wide whitespace-nowrap uppercase">
+            <span class="flex items-center gap-2"><img src="/images/clues/tiket.png" alt="" class="size-8" />Misteri Tiket Konser</span>
+            <span class="flex items-center gap-2"><img src="/images/clues/sosmed.png" alt="" class="size-8" />Misteri TWS Viral</span>
+            <span class="flex items-center gap-2"><img src="/images/clues/stok.png" alt="" class="size-8" />Misteri Tumbler</span>
+            <span class="flex items-center gap-2"><img src="/images/clues/harga.png" alt="" class="size-8" />Misteri Coffee Shop</span>
+            <span class="flex items-center gap-2"><img src="/images/clues/pembeli.png" alt="" class="size-8" />Misteri Festival</span>
+            <span class="flex items-center gap-2"><img src="/images/clues/data.png" alt="" class="size-8" />Misteri Sepatu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================ FITUR ============================ -->
+      <section id="fitur" class="relative">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden">
+          <div class="blob top-[10%] right-[-10%] size-80 bg-sun/25" data-parallax="-0.3"></div>
+          <div class="blob top-[55%] left-[-12%] size-96 bg-honey/20" data-parallax="-0.2"></div>
+          <img src="/images/anim/kilau.svg" alt="" class="absolute top-[30%] left-[48%] w-9" data-parallax="0.4" />
+        </div>
+
+        <div class="page relative space-y-28 py-20 lg:space-y-36 lg:py-28">
+          <!-- 1. Investigasi -->
+          <article class="grid items-center gap-10 lg:grid-cols-2">
+            <div class="reveal" style="--i: 0">
+              <h2 class="section-title">belajar sambil menyelidiki</h2>
+              <p class="mt-4 max-w-xl font-body text-lg text-bark">
+                Setiap misi adalah kasus ekonomi nyata: harga tiket konser naik, TWS mendadak viral, stok tumbler menumpuk. Murid membaca tiga petunjuk lalu menyusun hubungan sebab-akibatnya.
+              </p>
             </div>
-            <div>
-              <label class="label" for="reg-email">Email</label>
-              <input class="input" id="reg-email" name="email" type="email" autocomplete="email" required placeholder="nama@sekolah.sch.id" />
+            <div class="reveal reveal-side relative mx-auto h-96 w-full max-w-md" style="--i: 1; --sx: 80px; --sr: 8deg" aria-hidden="true" data-nomi-stage>
+              <div class="clue-card float absolute top-4 left-0 w-60 -rotate-6" style="--dur: 5s" data-parallax="0.08" data-inspect="1">
+                <img src="/images/clues/tiket.png" alt="" class="size-14" />
+                <div><p class="font-extrabold">Tiket</p><p class="font-body text-sm text-bark">Rp 100k → <b class="text-brand">Rp 150k</b></p></div>
+              </div>
+              <div class="clue-card float absolute top-[36%] right-0 w-60 rotate-[5deg]" style="--dur: 4.4s; --delay: -1.2s" data-parallax="-0.08" data-inspect="2">
+                <img src="/images/clues/pembeli.png" alt="" class="size-14" />
+                <div><p class="font-extrabold">Pembeli</p><p class="font-body text-sm text-bark">50 → <b class="text-brand">20 orang</b></p></div>
+              </div>
+              <div class="clue-card float absolute bottom-6 left-[8%] w-60 -rotate-3" style="--dur: 5.4s; --delay: -2.4s" data-parallax="0.12" data-inspect="3">
+                <img src="/images/clues/data.png" alt="" class="size-14" />
+                <div><p class="font-extrabold">Data</p><p class="font-body text-sm text-bark">100 → <b class="text-brand">40 terjual</b></p></div>
+              </div>
+              <img src="/images/anim/kaca-pembesar.svg" alt="" class="absolute top-[20%] left-[28%] z-10 w-38" data-nomi-tool />
+              <div class="absolute -top-10 right-0 z-20 w-28">
+                <div data-nomi-rig data-mood="curiga" data-scene="selidik"></div>
+              </div>
+              <img src="/images/anim/tanya.svg" alt="" class="absolute -top-16 right-22 w-19" data-parallax="0.3" />
             </div>
-            <div>
-              <label class="label" for="reg-password">Password</label>
-              <div class="relative">
-                <input class="input pr-14" id="reg-password" name="password" type="password" autocomplete="new-password" required minlength="6" placeholder="Minimal 6 karakter" />
-                <button type="button" class="btn-icon absolute top-1/2 right-2 -translate-y-1/2" data-toggle-password aria-label="Tampilkan password"><svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </article>
+
+          <!-- 2. Guru membuat misi -->
+          <article class="grid items-center gap-10 lg:grid-cols-2">
+            <div class="reveal lg:order-2" style="--i: 0">
+              <h2 class="section-title">misi dibuat oleh guru</h2>
+              <p class="mt-4 max-w-xl font-body text-lg text-bark">
+                Lewat Teacher Portal, guru menyusun misi dalam 4 langkah: <b>informasi kasus</b>, <b>3 petunjuk</b>, <b>kunci jawaban</b>, lalu <b>publikasi</b>. Materi Permintaan &amp; Penawaran juga bisa diunggah kapan saja.
+              </p>
+            </div>
+            <div class="reveal reveal-side relative mx-auto w-full max-w-md pt-10 lg:order-1" style="--i: 1; --sx: -80px; --sr: -8deg" aria-hidden="true" data-nomi-stage>
+              <div class="card-frame relative" data-wizard-demo>
+                <div class="flex items-center justify-center gap-2">
+                  <span class="demo-dot size-7 rounded-full border-3 border-ink bg-cream" style="--i: 0" data-step="1"></span><span class="h-1.5 w-6 rounded-full bg-ink"></span>
+                  <span class="demo-dot size-7 rounded-full border-3 border-ink bg-cream" style="--i: 1" data-step="2"></span><span class="h-1.5 w-6 rounded-full bg-ink"></span>
+                  <span class="demo-dot size-7 rounded-full border-3 border-ink bg-cream" style="--i: 2" data-step="3"></span><span class="h-1.5 w-6 rounded-full bg-ink"></span>
+                  <span class="demo-dot size-7 rounded-full border-3 border-ink bg-cream" style="--i: 3" data-step="4"></span>
+                </div>
+                <p class="mt-4 text-center font-extrabold">Apa yang terjadi?</p>
+                <div class="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                  <div class="slot min-h-12 rounded-2xl border-[3px] text-base" data-inspect="1"><span class="demo-chip" style="--i: 0">Harga</span></div>
+                  <img src="/images/icons/arrow.svg" alt="" class="h-6" />
+                  <div class="slot min-h-12 rounded-2xl border-[3px] text-base" data-inspect="2"><span class="demo-chip" style="--i: 1">Naik</span></div>
+                  <span></span><span></span><img src="/images/icons/arrow.svg" alt="" class="mx-auto h-6 rotate-90" />
+                  <div class="slot min-h-12 rounded-2xl border-[3px] text-base" data-inspect="4"><span class="demo-chip" style="--i: 3">Turun</span></div>
+                  <img src="/images/icons/arrow.svg" alt="" class="h-6 -scale-x-100" />
+                  <div class="slot min-h-12 rounded-2xl border-[3px] text-base" data-inspect="3"><span class="demo-chip" style="--i: 2">Permintaan</span></div>
+                </div>
+              </div>
+              <div class="absolute -top-6 -right-6 z-20 w-32">
+                <div data-nomi-rig data-mood="mikir" data-scene="ide"></div>
+              </div>
+              <img src="/images/anim/bohlam.svg" alt="" class="absolute -top-18 right-22 w-20" data-parallax="0.32" />
+            </div>
+          </article>
+
+          <!-- 3. XP & Peringkat -->
+          <article class="grid items-center gap-10 lg:grid-cols-2">
+            <div class="reveal" style="--i: 0">
+              <h2 class="section-title">XP, lencana &amp; peringkat</h2>
+              <p class="mt-4 max-w-xl font-body text-lg text-bark">
+                Jawaban dicek otomatis. Murid mendapat XP dan lencana, lalu bersaing sehat di papan peringkat kelas. Guru tinggal memantau perkembangan semua murid dari satu halaman.
+              </p>
+            </div>
+            <div class="reveal relative mx-auto flex h-96 w-full max-w-md items-end justify-center gap-4" style="--i: 1" aria-hidden="true" data-nomi-stage>
+              <img src="/images/anim/konfeti.svg" alt="" class="absolute -top-2 left-1/2 w-full max-w-sm -translate-x-1/2" />
+              <img src="/images/anim/stempel.svg" alt="" class="absolute top-2 -left-10 w-48" data-parallax="-0.2" />
+              <img src="/images/anim/koin.svg" alt="" class="absolute top-28 -left-2 w-16" data-parallax="0.25" />
+              <div class="absolute -top-4 right-0 z-20 w-24">
+                <div data-nomi-rig data-mood="normal" data-scene="umumkan"></div>
+              </div>
+              <div class="flex w-28 flex-col items-center" data-inspect="2">
+                <img src="/images/badges/lencana-2.png" alt="" class="float mb-2 w-16" style="--dur: 4.6s; --delay: -1s" />
+                <p class="font-extrabold">Bima</p><p class="text-sm font-bold text-brand" data-count="3650">0 XP</p>
+                <div class="grow-bar mt-2 grid h-32 w-full place-items-center rounded-t-2xl border-3 border-ink bg-[#d9d9d9] text-3xl font-extrabold" style="--i: 1">2</div>
+              </div>
+              <div class="flex w-28 flex-col items-center" data-inspect="3">
+                <img src="/images/badges/lencana-1.png" alt="" class="float mb-2 w-20" style="--dur: 4s" />
+                <p class="font-extrabold">Alya</p><p class="text-sm font-bold text-brand" data-count="4200">0 XP</p>
+                <div class="grow-bar mt-2 grid h-44 w-full place-items-center rounded-t-2xl border-3 border-ink bg-linear-to-b from-sun to-sun-light text-3xl font-extrabold" style="--i: 0">1</div>
+              </div>
+              <div class="flex w-28 flex-col items-center" data-inspect="1">
+                <img src="/images/badges/lencana-3.png" alt="" class="float mb-2 w-14" style="--dur: 5s; --delay: -2s" />
+                <p class="font-extrabold">Citra</p><p class="text-sm font-bold text-brand" data-count="3100">0 XP</p>
+                <div class="grow-bar mt-2 grid h-24 w-full place-items-center rounded-t-2xl border-3 border-ink bg-[#e0915a] text-3xl font-extrabold" style="--i: 2">3</div>
               </div>
             </div>
-            <div>
-              <label class="label" for="reg-password2">Konfirmasi Password</label>
-              <input class="input" id="reg-password2" name="password2" type="password" autocomplete="new-password" required placeholder="Ulangi password" />
+          </article>
+        </div>
+      </section>
+
+      <!-- ============================ TENTANG ============================ -->
+      <section id="tentang" class="relative overflow-x-clip border-y-3 border-ink bg-linear-to-b from-sun to-sun-light py-20 lg:py-24">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+          <img src="/images/anim/kilau.svg" alt="" class="absolute top-24 right-[10%] w-10" data-parallax="0.5" />
+          <img src="/images/anim/label-harga.svg" alt="" class="absolute top-[40%] right-[1%] hidden w-32 lg:block" data-parallax="-0.3" />
+          <img src="/images/anim/kaca-pembesar.svg" alt="" class="absolute top-[52%] left-[1%] hidden w-28 lg:block" data-parallax="-0.25" />
+        </div>
+
+        <div class="page relative pb-0">
+          <div class="grid items-center gap-8 lg:grid-cols-[1fr_320px]">
+            <div class="reveal text-center lg:text-left">
+              <h2 class="text-4xl font-extrabold sm:text-5xl">Apa itu CONIX?</h2>
+              <p class="mt-4 max-w-2xl font-body text-lg">
+                <b>CONIX</b> (<i>Investigation for Better Economy</i>) adalah media belajar ekonomi berbasis investigasi.
+                Ada dua bagian: <b>aplikasi mobile untuk murid</b> dan <b>Teacher Portal (website ini) untuk guru</b>.
+              </p>
             </div>
-            <p class="hint">Akun ini berperan sebagai <b>Guru</b>. Murid mendaftar lewat aplikasi CONIX dan bergabung memakai kode kelas Anda.</p>
-            <p class="field-error" data-error hidden></p>
-            <button class="btn btn-primary btn-lg w-full">Daftar</button>
-            <p class="text-center font-body">
-              Sudah punya akun?
-              <a href="#masuk" class="font-sans font-bold text-brand underline-offset-4 hover:underline" data-switch="login">Masuk di sini</a>
-            </p>
-          </form>
+            <img src="/images/anim/grafik.svg" alt="" aria-hidden="true" class="reveal reveal-side mx-auto w-full max-w-xs" style="--i: 1; --sx: 60px" />
+          </div>
+
+          <h3 class="reveal mt-14 text-center text-2xl font-extrabold">Cara kerjanya</h3>
+          <ol class="mt-8 grid gap-6 md:grid-cols-3" data-nomi-stage>
+            <li class="reveal card relative flex flex-col items-center p-6 text-center" style="--i: 0" data-inspect="1">
+              <span class="absolute -top-5 grid size-10 place-items-center rounded-full border-3 border-ink bg-brand text-lg font-extrabold text-cream">1</span>
+              <img src="/images/mission/daftar-misi.png" alt="" class="wiggle-hover size-20" />
+              <p class="mt-3 text-xl font-extrabold">Guru membuat misi</p>
+              <p class="mt-1 font-body text-bark">Kasus, 3 petunjuk, kunci jawaban, dan XP disusun di Teacher Portal.</p>
+            </li>
+            <li class="reveal card relative flex flex-col items-center p-6 text-center" style="--i: 1">
+              <span class="absolute -top-5 grid size-10 place-items-center rounded-full border-3 border-ink bg-brand text-lg font-extrabold text-cream">2</span>
+              <div class="w-16" data-nomi-rig data-mood="curiga" data-scene="selidik" data-walk="false"></div>
+              <p class="mt-3 text-xl font-extrabold">Murid menyelidiki</p>
+              <p class="mt-1 font-body text-bark">Murid bergabung dengan kode kelas, membaca petunjuk, lalu menyusun jawaban.</p>
+            </li>
+            <li class="reveal card relative flex flex-col items-center p-6 text-center" style="--i: 2" data-inspect="2">
+              <span class="absolute -top-5 grid size-10 place-items-center rounded-full border-3 border-ink bg-brand text-lg font-extrabold text-cream">3</span>
+              <img src="/images/mission/misi-harian.png" alt="" class="wiggle-hover size-20" />
+              <p class="mt-3 text-xl font-extrabold">XP &amp; peringkat</p>
+              <p class="mt-1 font-body text-bark">Jawaban dicek otomatis, XP bertambah, peringkat kelas diperbarui.</p>
+            </li>
+          </ol>
+
+          <h3 class="reveal mt-16 text-center text-2xl font-extrabold">Materi yang dipelajari</h3>
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <article class="reveal card flex gap-5 p-6" style="--i: 0">
+              <img src="/images/topics/permintaan.png" alt="" class="float size-20 shrink-0" style="--dur: 5s" />
+              <div>
+                <p class="text-2xl font-extrabold">Permintaan</p>
+                <p class="mt-1 font-body text-bark">Jumlah barang yang ingin dan mampu dibeli konsumen pada harga tertentu.</p>
+                <p class="mt-2 rounded-xl bg-paper px-3 py-2 text-sm font-bold">Hukum permintaan: harga naik → jumlah diminta turun.</p>
+              </div>
+            </article>
+            <article class="reveal card flex gap-5 p-6" style="--i: 1">
+              <img src="/images/topics/penawaran.png" alt="" class="float size-20 shrink-0" style="--dur: 5s; --delay: -2s" />
+              <div>
+                <p class="text-2xl font-extrabold">Penawaran</p>
+                <p class="mt-1 font-body text-bark">Jumlah barang yang ingin dan mampu dijual produsen pada harga tertentu.</p>
+                <p class="mt-2 rounded-xl bg-paper px-3 py-2 text-sm font-bold">Hukum penawaran: harga naik → jumlah ditawarkan naik.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Untuk murid -->
+          <div class="reveal mt-16 grid items-center gap-6 rounded-[28px] border-3 border-ink bg-cream p-6 shadow-card sm:p-8 md:grid-cols-[auto_1fr_auto]">
+            <div class="mx-auto w-32">
+              <div data-nomi-rig data-mood="senang" data-scene="rayakan"></div>
+            </div>
+            <div class="text-center md:text-left">
+              <p class="text-2xl font-extrabold">Kamu murid?</p>
+              <p class="mt-1 font-body text-bark">Unduh aplikasi CONIX di HP, masukkan <b>kode kelas</b> dari gurumu, lalu mulai investigasi pertamamu!</p>
+            </div>
+            <div class="mx-auto" data-app-download></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ TIM ============================ -->
+      <section id="tim" class="relative overflow-x-clip">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+          <div class="blob top-[20%] left-[-6%] size-64 bg-sun/25" data-parallax="-0.3"></div>
+          <img src="/images/anim/kilau.svg" alt="" class="absolute top-16 right-[18%] w-10" data-parallax="0.4" />
+        </div>
+        <div class="page relative py-20 lg:py-24">
+          <div class="reveal text-center">
+            <h2 class="section-title">tim di balik CONIX</h2>
+            <p class="mt-3 font-body text-lg text-bark">Kelompok 6 · Pendidikan Multimedia · Universitas Pendidikan Indonesia</p>
+          </div>
+          <div class="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <figure class="reveal card group flex flex-col items-center p-6 text-center" style="--i: 0">
+              <div class="relative size-36 overflow-hidden rounded-full border-3 border-ink bg-linear-to-b from-sun to-sun-light transition duration-300 group-hover:-translate-y-1 group-hover:rotate-3">
+                <img src="/images/team/ridwan-septian.webp" alt="Foto Ridwan Septian" class="h-full w-full object-cover object-top" loading="lazy" />
+              </div>
+              <figcaption class="mt-4"><p class="text-lg font-extrabold">Ridwan Septian</p><p class="font-body text-sm font-semibold text-brand">Konseptor &amp; Aset</p></figcaption>
+            </figure>
+            <figure class="reveal card group flex flex-col items-center p-6 text-center" style="--i: 1">
+              <div class="relative size-36 overflow-hidden rounded-full border-3 border-ink bg-linear-to-b from-sun to-sun-light transition duration-300 group-hover:-translate-y-1 group-hover:-rotate-3">
+                <img src="/images/team/farih-maulana.webp" alt="Foto Farih Maulana" class="h-full w-full object-cover object-top" loading="lazy" />
+              </div>
+              <figcaption class="mt-4"><p class="text-lg font-extrabold">Farih Maulana</p><p class="font-body text-sm font-semibold text-brand">Backend Developer</p></figcaption>
+            </figure>
+            <figure class="reveal card group flex flex-col items-center p-6 text-center" style="--i: 2">
+              <div class="relative size-36 overflow-hidden rounded-full border-3 border-ink bg-linear-to-b from-sun to-sun-light transition duration-300 group-hover:-translate-y-1 group-hover:rotate-3">
+                <img src="/images/team/ridwan-muttahid.webp" alt="Foto Ridwan Muttahid" class="h-full w-full object-cover object-top" loading="lazy" />
+              </div>
+              <figcaption class="mt-4"><p class="text-lg font-extrabold">Ridwan Muttahid</p><p class="font-body text-sm font-semibold text-brand">Frontend Developer</p></figcaption>
+            </figure>
+            <figure class="reveal card group flex flex-col items-center border-brand bg-paper p-6 text-center" style="--i: 3">
+              <div class="relative size-36 overflow-hidden rounded-full border-3 border-ink bg-linear-to-b from-sun to-sun-light transition duration-300 group-hover:-translate-y-1 group-hover:-rotate-3">
+                <img src="/images/team/agus-juhana.webp" alt="Foto Agus Juhana" class="h-full w-full object-cover object-top" loading="lazy" />
+              </div>
+              <figcaption class="mt-4"><p class="text-lg font-extrabold">Agus Juhana, S.Pd., M.T.</p><p class="font-body text-sm font-semibold text-brand">Dosen Pengampu</p></figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ CTA AKHIR ============================ -->
+      <section class="page pb-20">
+        <div class="reveal panel-sun relative flex flex-col items-center overflow-hidden px-6 py-14 text-center">
+          <img src="/images/anim/koin.svg" alt="" aria-hidden="true" class="absolute top-2 left-4 hidden w-24 sm:block" />
+          <img src="/images/anim/label-harga.svg" alt="" aria-hidden="true" class="absolute right-2 bottom-4 hidden w-32 sm:block" />
+          <h2 class="max-w-2xl text-3xl font-extrabold sm:text-5xl">Siap memecahkan kasus ekonomi bersama kelasmu?</h2>
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row" data-guest-only>
+            <a href="auth/register.html" class="btn-chunky btn-chunky-brand">Daftar sebagai guru</a>
+            <a href="auth/login.html" class="btn-chunky btn-chunky-light">Masuk</a>
+          </div>
+          <a href="pages/dashboard.html" class="btn-chunky btn-chunky-brand mt-8" data-user-only hidden>Buka Dashboard</a>
         </div>
       </section>
     </main>
 
-    <script type="module" src="/src/js/pages/login.js"></script>
+    <!-- ============================ FOOTER ============================ -->
+    <footer class="relative isolate mt-8 bg-ink text-cream">
+      <!-- tepi atas bergelombang + Nomi mengintip -->
+      <svg class="absolute bottom-full left-0 h-10 w-full text-ink sm:h-14" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 48 C180 8 360 8 540 40 S900 80 1080 40 S1320 0 1440 32 V80 H0 Z" fill="currentColor" />
+      </svg>
+      <div aria-hidden="true" class="peek absolute right-[8%] bottom-full w-20 sm:w-24">
+        <div data-nomi-rig data-mood="kedip" data-interactive="false"></div>
+      </div>
+
+      <div class="page relative bg-ink pt-10 pb-0">
+        <div class="grid gap-10 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-[1.6fr_1fr_1fr]">
+          <div class="sm:col-span-2 lg:col-span-1">
+            <img src="/images/brand/logotype.png" alt="CONIX" class="mx-auto h-11 w-auto sm:mx-0" />
+            <p class="mx-auto mt-4 max-w-sm font-body text-sm leading-relaxed text-cream/75 sm:mx-0">
+              Investigation for Better Economy. Portal guru untuk menyusun misi investigasi ekonomi yang dimainkan murid lewat aplikasi CONIX.
+            </p>
+          </div>
+          <nav aria-label="Jelajahi">
+            <p class="footer-head">Jelajahi</p>
+            <ul class="footer-links">
+              <li><a href="#beranda">Beranda</a></li>
+              <li><a href="#fitur">Fitur</a></li>
+              <li><a href="#tentang">Tentang</a></li>
+              <li><a href="#tim">Tim</a></li>
+            </ul>
+          </nav>
+          <nav aria-label="Akun guru">
+            <p class="footer-head">Akun Guru</p>
+            <ul class="footer-links">
+              <li data-guest-only><a href="auth/login.html">Masuk</a></li>
+              <li data-guest-only><a href="auth/register.html">Daftar gratis</a></li>
+              <li data-user-only hidden><a href="pages/dashboard.html">Buka Dashboard</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- institusi -->
+        <div class="mt-12 flex flex-col items-center gap-6 rounded-3xl border-3 border-cream/15 bg-cream px-6 py-6 text-ink shadow-[0_6px_0_rgb(0_0_0/0.25)] md:flex-row md:justify-between md:px-10">
+          <div class="text-center md:text-left">
+            <p class="text-xs font-extrabold tracking-widest text-brand uppercase">Dikembangkan oleh Kelompok 6</p>
+            <p class="mt-1 font-body text-sm text-ink/75">Program Studi Pendidikan Multimedia<br class="sm:hidden" /> · Universitas Pendidikan Indonesia</p>
+          </div>
+          <div class="flex items-center gap-6">
+            <img src="/images/partners/upi.png" alt="Universitas Pendidikan Indonesia" class="h-16 w-auto" />
+            <span class="h-12 w-0.5 rounded-full bg-ink/15" aria-hidden="true"></span>
+            <img src="/images/partners/pendidikan-multimedia.png" alt="Pendidikan Multimedia" class="h-12 w-auto" />
+          </div>
+        </div>
+
+        <div class="mt-10 flex flex-col items-center justify-between gap-3 border-t-2 border-cream/10 py-6 font-body text-sm text-cream/60 sm:flex-row">
+          <p>© 2026 CONIX · Kelompok 6</p>
+          <a href="#beranda" class="font-sans font-bold text-cream/80 transition hover:text-sun">Kembali ke atas ↑</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/js/pages/landing.js"></script>
   </body>
 </html>

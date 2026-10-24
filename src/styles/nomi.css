@@ -1,0 +1,556 @@
+/*
+ * Nomi — rig maskot 2D (lihat src/js/components/nomi.js).
+ * Titik putar dihitung dari kanvas aset tim aset: panggung 780×970 mulai (150, 40).
+ * Arah pandang dari JS lewat --lx / --ly (-1..1).
+ */
+
+@keyframes nomi-breathe {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(0.5%) scale(1.012, 0.985);
+  }
+}
+@keyframes nomi-nod {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(0.7%) rotate(1.4deg);
+  }
+}
+@keyframes nomi-hat {
+  0%,
+  100% {
+    transform: rotate(-1.5deg);
+  }
+  50% {
+    transform: rotate(2.2deg);
+  }
+}
+@keyframes nomi-coin {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes nomi-arm-r {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+/* lengan menggantung: --arm-dir = -1 (kiri) / 1 (kanan, cermin) agar berayun ke arah luar */
+@keyframes nomi-arm-l {
+  0%,
+  100% {
+    transform: rotate(calc(var(--arm-dir, -1) * -1.5deg));
+  }
+  50% {
+    transform: rotate(calc(var(--arm-dir, -1) * 2deg));
+  }
+}
+
+/* ganti ekspresi: wajah "meletup" kecil */
+@keyframes nomi-pop {
+  0% {
+    transform: scale(0.86);
+  }
+  55% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* diklik: jongkok → melompat → mendarat memantul */
+@keyframes nomi-hop {
+  0% {
+    transform: none;
+    animation-timing-function: ease-out;
+  }
+  18% {
+    transform: scale(1.08, 0.9);
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  38% {
+    transform: translateY(-12%) scale(0.94, 1.07);
+    animation-timing-function: ease-out;
+  }
+  52% {
+    transform: translateY(-15%) rotate(-3deg);
+    animation-timing-function: ease-in;
+  }
+  70% {
+    transform: scale(1.08, 0.92);
+    animation-timing-function: ease-out;
+  }
+  84% {
+    transform: translateY(-1.5%) scale(0.98, 1.03);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes nomi-shadow-hop {
+  0%,
+  100% {
+    transform: none;
+  }
+  18%,
+  70% {
+    transform: scaleX(1.12);
+  }
+  52% {
+    transform: scaleX(0.6);
+    opacity: 0.1;
+  }
+}
+@keyframes nomi-thumb {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: rotate(-22deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+  68% {
+    transform: rotate(-16deg);
+  }
+  84% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes nomi-arm-up {
+  0%,
+  100% {
+    transform: none;
+  }
+  35%,
+  65% {
+    transform: rotate(calc(var(--arm-dir, -1) * 28deg));
+  }
+}
+@keyframes nomi-tuck {
+  0%,
+  100% {
+    transform: none;
+  }
+  45%,
+  58% {
+    transform: translateY(-2.5%) rotate(var(--tuck));
+  }
+}
+/* disorot: tersentak kaget */
+@keyframes nomi-startle {
+  0% {
+    transform: none;
+  }
+  25% {
+    transform: translateY(-4%) scale(0.95, 1.06);
+    animation-timing-function: ease-in;
+  }
+  55% {
+    transform: scale(1.04, 0.96);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@layer components {
+  .nomi {
+    position: relative;
+    aspect-ratio: 780 / 970;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nomi:not([data-interactive='false']) {
+    cursor: pointer;
+  }
+  .nomi-rig,
+  .nomi-layer {
+    position: absolute;
+    inset: 0;
+  }
+  .nomi-part,
+  .nomi-slot {
+    position: absolute;
+    max-width: none;
+    height: auto;
+  }
+  .nomi-slot {
+    aspect-ratio: 1;
+  }
+  .nomi-slot img,
+  .nomi-pupil img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .nomi-pupil {
+    position: absolute;
+    inset: 0;
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+  }
+  .nomi-pupil[hidden] {
+    display: none;
+  }
+
+  .nomi-shadow {
+    position: absolute;
+    left: 24%;
+    bottom: 0.5%;
+    width: 54%;
+    height: 4%;
+    border-radius: 50%;
+    background: var(--color-ink);
+    opacity: 0.2;
+  }
+
+  /* gerakan diam: tiap bagian punya irama & jeda sendiri agar tidak kaku */
+  .nomi-rig {
+    transform-origin: 50% 98%;
+  }
+  .nomi-upper {
+    transform-origin: 46% 74%;
+    animation: nomi-breathe 3.4s ease-in-out infinite;
+  }
+  .nomi-head {
+    transform-origin: 40.5% 61.9%;
+    animation: nomi-nod 3.4s ease-in-out -0.35s infinite;
+    rotate: calc(var(--lx, 0) * 3deg);
+    transition: rotate 0.45s ease-out;
+  }
+  .nomi-topi {
+    transform-origin: 50.4% 93.6%;
+    animation: nomi-hat 3.4s ease-in-out -0.75s infinite;
+  }
+  .nomi-koin {
+    transform-origin: 13.7% 15.6%;
+    animation: nomi-coin 3.4s ease-in-out -1.1s infinite;
+  }
+  /* lengan kanan mengacungkan jempol hanya saat beraksi (jempol / lompat);
+     biasanya yang tampil lengan kanan menggantung (cermin tangan kiri) */
+  .nomi-arm-kanan {
+    transform-origin: 98% 40%;
+    animation: nomi-arm-r 3.4s ease-in-out -0.5s infinite;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .nomi-arm-kanan-turun {
+    transform-origin: 81.2% 3%;
+    --arm-dir: 1;
+    animation: nomi-arm-l 3.4s ease-in-out -0.4s infinite;
+    transition: opacity 0.12s;
+  }
+  .nomi-arm-kiri {
+    transform-origin: 18.8% 3%;
+    --arm-dir: -1;
+    animation: nomi-arm-l 3.4s ease-in-out -0.9s infinite;
+  }
+  .nomi.is-jempol .nomi-arm-kanan,
+  .nomi.is-lompat .nomi-arm-kanan {
+    opacity: 1;
+  }
+  .nomi.is-jempol .nomi-arm-kanan-turun,
+  .nomi.is-lompat .nomi-arm-kanan-turun {
+    opacity: 0;
+  }
+  .nomi-leg-kanan {
+    transform-origin: 44.5% 72.2%;
+    --tuck: 6deg;
+  }
+  .nomi-leg-kiri {
+    transform-origin: 61.8% 71.3%;
+    --tuck: -6deg;
+  }
+
+  /* arah pandang: wajah sedikit menoleh, pupil bergerak lebih jauh */
+  .nomi-face {
+    translate: calc(var(--lx, 0) * 2.2%) calc(var(--ly, 0) * 1.6%);
+    transition: translate 0.3s ease-out;
+  }
+  .nomi-pupil img {
+    /* jarak lirik dibatasi agar pupil tetap di dalam mata (±11px dari kanvas 200px) */
+    translate: calc(var(--lx, 0) * 5.5%) calc(var(--ly, 0) * 7%);
+    transition: translate 0.18s cubic-bezier(0.3, 0, 0.3, 1.4);
+  }
+  .nomi-face.is-pop .nomi-slot {
+    animation: nomi-pop 0.3s var(--ease-out-soft);
+  }
+
+  /* reaksi */
+  .nomi.is-lompat .nomi-rig {
+    animation: nomi-hop 1s both;
+  }
+  .nomi.is-lompat .nomi-shadow {
+    animation: nomi-shadow-hop 1s both;
+  }
+  .nomi.is-lompat .nomi-arm-kanan {
+    animation: nomi-thumb 1s both;
+  }
+  .nomi.is-lompat .nomi-arm-kiri {
+    animation: nomi-arm-up 1s both;
+  }
+  .nomi.is-lompat .nomi-leg {
+    animation: nomi-tuck 1s both;
+  }
+  .nomi.is-kaget .nomi-rig {
+    animation: nomi-startle 0.6s both;
+  }
+  .nomi.is-jempol .nomi-arm-kanan {
+    animation: nomi-thumb 1s both;
+  }
+
+  /* condong (adegan "selidik"): JS mengisi --lean = -1 | 0 | 1 */
+  .nomi-rig {
+    rotate: calc(var(--lean, 0) * 7deg);
+    translate: calc(var(--lean, 0) * 4%) 0;
+    transition:
+      rotate 0.7s cubic-bezier(0.4, 0, 0.2, 1.4),
+      translate 0.7s cubic-bezier(0.4, 0, 0.2, 1.4);
+  }
+  .nomi-head {
+    /* kepala menoleh lebih jauh saat condong — gerakan susulan */
+    rotate: calc(var(--lx, 0) * 3deg + var(--lean, 0) * 5deg);
+  }
+
+  /* menari (adegan "rayakan") */
+  .nomi[data-scene='rayakan'] .nomi-rig {
+    animation: nomi-dance 1.2s ease-in-out infinite;
+  }
+  .nomi[data-scene='rayakan'] .nomi-arm-kiri {
+    animation: nomi-arm-up 1.2s ease-in-out infinite;
+  }
+  .nomi[data-scene='rayakan'] .nomi-arm-kanan-turun {
+    animation: nomi-arm-up 1.2s ease-in-out -0.6s infinite;
+  }
+  .nomi[data-scene='rayakan'] .nomi-leg {
+    animation: nomi-step 1.2s ease-in-out infinite;
+  }
+  .nomi[data-scene='rayakan'] .nomi-leg-kiri {
+    animation-delay: -0.6s;
+  }
+  .nomi[data-scene='rayakan'] .nomi-shadow {
+    animation: nomi-dance-shadow 0.6s ease-in-out infinite;
+  }
+
+  /* di luar layar: semua gerakan berhenti (hemat baterai) */
+  .nomi:not(.is-visible) * {
+    animation-play-state: paused !important;
+  }
+}
+
+@keyframes nomi-dance {
+  0%,
+  100% {
+    transform: scale(1.05, 0.95);
+  }
+  25% {
+    transform: translateY(-5%) rotate(-5deg) scale(0.97, 1.04);
+  }
+  50% {
+    transform: scale(1.05, 0.95);
+  }
+  75% {
+    transform: translateY(-5%) rotate(5deg) scale(0.97, 1.04);
+  }
+}
+@keyframes nomi-dance-shadow {
+  0%,
+  100% {
+    transform: scaleX(1.08);
+  }
+  50% {
+    transform: scaleX(0.75);
+    opacity: 0.12;
+  }
+}
+@keyframes nomi-step {
+  0%,
+  50%,
+  100% {
+    transform: none;
+  }
+  25% {
+    transform: translateY(-3%) rotate(var(--tuck));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nomi-upper,
+  .nomi-head,
+  .nomi-topi,
+  .nomi-koin,
+  .nomi-arm-kanan,
+  .nomi-arm-kanan-turun,
+  .nomi-arm-kiri {
+    animation-duration: 6s;
+  }
+}
+
+/* ------------------------------------------- Interaksi Nomi dengan halaman */
+@keyframes nomi-poke {
+  0%,
+  100% {
+    scale: 1;
+    rotate: 0deg;
+  }
+  30% {
+    scale: 1.18;
+    rotate: -10deg;
+  }
+  55% {
+    scale: 0.94;
+    rotate: 7deg;
+  }
+  78% {
+    scale: 1.04;
+    rotate: -3deg;
+  }
+}
+@keyframes nomi-check {
+  0% {
+    scale: 0;
+    rotate: -40deg;
+  }
+  60% {
+    scale: 1.25;
+    rotate: 8deg;
+  }
+  100% {
+    scale: 1;
+    rotate: 0deg;
+  }
+}
+
+@layer components {
+  /* elemen yang sedang diperiksa Nomi: terangkat & menyala */
+  [data-inspect] {
+    transition:
+      scale 0.45s cubic-bezier(0.3, 0, 0.2, 1.5),
+      filter 0.3s ease;
+  }
+  [data-inspect].is-inspected {
+    z-index: 5;
+    scale: 1.08;
+    filter: drop-shadow(0 0 14px rgb(244 108 12 / 0.65));
+  }
+
+  /* petunjuk yang sudah diperiksa diberi centang */
+  .clue-card.is-checked::after {
+    content: '✓';
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-step);
+    color: #fff;
+    font-weight: 800;
+    animation: nomi-check 0.45s var(--ease-out-soft) both;
+  }
+
+  /* alat (kaca pembesar) berpindah ke petunjuk yang diperiksa */
+  [data-nomi-tool] {
+    transition: translate 0.65s cubic-bezier(0.4, 0, 0.2, 1.25);
+  }
+
+  /* benda di hero yang ditoleh Nomi bergoyang */
+  [data-poke].is-poked {
+    animation: nomi-poke 0.7s ease-out;
+  }
+
+  /* demo wizard yang diisi Nomi (menggantikan animasi otomatis) */
+  [data-wizard-demo].is-driven .demo-chip,
+  [data-wizard-demo].is-driven .demo-dot {
+    animation: none !important;
+  }
+  [data-wizard-demo].is-driven .demo-chip {
+    opacity: 0;
+    scale: 0.6;
+    translate: 0 -16px;
+    transition:
+      opacity 0.2s,
+      scale 0.45s cubic-bezier(0.3, 0, 0.2, 1.6),
+      translate 0.45s cubic-bezier(0.3, 0, 0.2, 1.6);
+  }
+  [data-wizard-demo].is-driven .demo-chip.is-on {
+    opacity: 1;
+    scale: 1;
+    translate: 0 0;
+  }
+  [data-wizard-demo].is-driven .demo-dot {
+    transition: background-color 0.3s;
+  }
+  [data-wizard-demo].is-driven .demo-dot.is-on {
+    /* !important: mengalahkan kelas utilitas bg-cream pada titik */
+    background-color: var(--color-step) !important;
+  }
+}
+
+/* ------------------------------------------------------------- Berjalan */
+@keyframes nomi-walk-bob {
+  0%,
+  50%,
+  100% {
+    transform: scale(1.02, 0.98);
+  }
+  25%,
+  75% {
+    transform: translateY(-3%) scale(0.99, 1.02);
+  }
+}
+@keyframes nomi-swing {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@layer components {
+  .nomi {
+    transition: translate var(--walk, 1s) cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  .nomi.is-walking .nomi-rig {
+    animation: nomi-walk-bob 0.4s ease-in-out infinite;
+  }
+  .nomi.is-walking .nomi-leg {
+    animation: nomi-step 0.4s ease-in-out infinite;
+  }
+  .nomi.is-walking .nomi-leg-kiri {
+    animation-delay: -0.2s;
+  }
+  .nomi.is-walking .nomi-arm-kanan-turun,
+  .nomi.is-walking .nomi-arm-kiri {
+    animation: nomi-swing 0.4s ease-in-out infinite;
+  }
+  .nomi.is-walking .nomi-arm-kiri {
+    animation-delay: -0.2s;
+  }
+  .nomi.is-walking .nomi-shadow {
+    animation: nomi-dance-shadow 0.2s ease-in-out infinite;
+  }
+}

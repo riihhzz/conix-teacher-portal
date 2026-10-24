@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Daftar akun guru CONIX Teacher Portal." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <title>Daftar · CONIX Teacher Portal</title>
+  </head>
+  <body class="overflow-x-hidden">
+    <header class="public-header">
+      <div class="page flex items-center gap-3 py-3 pb-3">
+        <a href="../index.html" aria-label="CONIX — Beranda" class="transition hover:scale-[1.03]">
+          <img src="/images/brand/logotype.png" alt="CONIX" class="h-10 w-auto sm:h-12" />
+        </a>
+        <a href="../index.html" class="nav-link ml-auto">← Beranda</a>
+        <a href="login.html" class="btn-chunky btn-chunky-light btn-chunky-sm" data-keep-query>Masuk</a>
+      </div>
+    </header>
+
+    <main class="page grid min-h-[calc(100vh-76px)] overflow-x-clip max-w-300 items-center gap-10 py-10 lg:grid-cols-2 lg:gap-16">
+      <!-- Form -->
+      <section class="pop-spring mx-auto w-full max-w-md lg:order-2" style="--in: 0.15s">
+        <form novalidate class="space-y-4 rounded-[23px] border-4 border-ink bg-cream p-6 shadow-soft sm:p-8" data-auth-form>
+          <header>
+            <h1 class="text-3xl font-extrabold">Buat akun guru</h1>
+            <p class="font-body text-bark">Kelas baru dan <b>kode kelas</b> dibuat otomatis untuk Anda.</p>
+          </header>
+          <div>
+            <label class="label" for="reg-nama">Nama Lengkap</label>
+            <input class="input" id="reg-nama" name="nama" autocomplete="name" required minlength="3" maxlength="60" placeholder="Agus Juhana" />
+          </div>
+          <div>
+            <label class="label" for="reg-email">Email</label>
+            <input class="input" id="reg-email" name="email" type="email" autocomplete="email" required placeholder="nama@sekolah.sch.id" />
+          </div>
+          <div>
+            <label class="label" for="reg-password">Password</label>
+            <div class="relative">
+              <input class="input pr-14" id="reg-password" name="password" type="password" autocomplete="new-password" required minlength="6" placeholder="Minimal 6 karakter" />
+              <button type="button" class="btn-icon absolute top-1/2 right-2 -translate-y-1/2" data-toggle-password aria-label="Tampilkan password"><svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </div>
+          <div>
+            <label class="label" for="reg-password2">Konfirmasi Password</label>
+            <input class="input" id="reg-password2" name="password2" type="password" autocomplete="new-password" required placeholder="Ulangi password" />
+          </div>
+          <p class="hint">Akun ini berperan sebagai <b>Guru</b>. Murid mendaftar lewat aplikasi CONIX dan bergabung memakai kode kelas Anda.</p>
+          <p class="field-error" data-error hidden></p>
+          <button class="btn-chunky btn-chunky-brand w-full">Daftar</button>
+          <p class="text-center font-body">
+            Sudah punya akun?
+            <a href="login.html" class="font-sans font-bold text-brand underline-offset-4 hover:underline" data-keep-query>Masuk di sini</a>
+          </p>
+        </form>
+      </section>
+
+      <!-- Ilustrasi -->
+      <section class="relative mx-auto hidden aspect-square w-full max-w-115 lg:order-1 lg:block" aria-hidden="true">
+        <div class="pop-spring absolute inset-[10%] rounded-full border-3 border-ink bg-linear-to-b from-sun to-sun-light shadow-card"></div>
+        <div class="spin-slow absolute inset-[4%] rounded-full border-3 border-dashed border-ink/25" style="--dur: 60s"></div>
+        <div class="scatter absolute top-[12%] left-[26%] h-[62%] w-[48%]" style="--in: 0.1s">
+          <div data-nomi-rig data-mood="senyum"></div>
+        </div>
+        <div class="scatter absolute top-[-2%] right-[2%] w-[22%]" style="--in: 0.3s; --fx: -120px; --fy: 140px">
+          <img src="/images/anim/bohlam.svg" alt="" class="w-full" />
+        </div>
+        <div class="scatter absolute top-[44%] left-[-2%] w-[22%]" style="--in: 0.45s; --fx: 150px; --fy: 0px">
+          <img src="/images/anim/grafik.svg" alt="" class="w-full" />
+        </div>
+        <div class="scatter absolute right-[10%] bottom-[2%] w-[19%]" style="--in: 0.6s; --fx: -110px; --fy: -140px">
+          <img src="/images/mission/misi-harian.png" alt="" class="float w-full" style="--r: -5deg; --delay: -3s" />
+        </div>
+        <img src="/images/anim/kilau.svg" alt="" class="absolute bottom-[16%] left-[16%] w-[9%]" />
+        <div class="pop-spring absolute top-[6%] left-[2%] rounded-2xl border-3 border-ink bg-paper px-3 py-1.5 text-sm font-extrabold shadow-[0_4px_0_var(--color-ink)]" style="--in: 0.9s">
+          Ayo jadi detektif! 🕵️
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/js/pages/register.js"></script>
+  </body>
+</html>

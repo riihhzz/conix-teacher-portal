@@ -22,7 +22,7 @@
   --color-honey-light: #fddd96;
 
   /* Status */
-  --color-ok: #30ee00; /* Aktif */
+  --color-ok: #00FF00; /* Aktif */
   --color-step: #12d400; /* langkah wizard selesai */
   --color-warn: #ffe100; /* Draft */
   --color-danger: #ff0000; /* Non Aktif / hapus */

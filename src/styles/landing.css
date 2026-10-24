@@ -1,0 +1,338 @@
+/*
+ * Halaman publik (landing, masuk, daftar) — animasi ceria terinspirasi Duolingo:
+ * tombol 3D "chunky", karakter melayang, ilustrasi membal saat di-scroll.
+ */
+
+/* ---------------------------------------------------------- Keyframes */
+/* melayang "kenyal": memanjang saat naik, memipih saat turun, rotasi sedikit tertinggal */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg)) scale(1.04, 0.96);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  30% {
+    transform: translateY(calc(var(--amp, -14px) * 0.7)) rotate(0deg) scale(0.97, 1.04);
+    animation-timing-function: ease-out;
+  }
+  50% {
+    transform: translateY(var(--amp, -14px)) rotate(calc(var(--r, 0deg) * -1)) scale(1, 1);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.7, 1);
+  }
+  85% {
+    transform: translateY(calc(var(--amp, -14px) * 0.15)) rotate(calc(var(--r, 0deg) * 0.5)) scale(0.99, 1.02);
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2.5deg);
+  }
+  50% {
+    transform: translateY(var(--amp, -18px)) rotate(2.5deg);
+  }
+}
+
+/* masuk dari titik tengah lalu "menyebar" ke posisinya, dengan pantulan */
+@keyframes scatter-in {
+  0% {
+    opacity: 0;
+    transform: translate(var(--fx, 0), var(--fy, 0)) scale(0.2) rotate(-25deg);
+  }
+  65% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.12) rotate(4deg);
+  }
+  82% {
+    transform: scale(0.95) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop-spring {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.03);
+  }
+  80% {
+    transform: translateY(2px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-spring {
+  0% {
+    opacity: 0;
+    transform: translateX(var(--sx, -60px)) rotate(var(--sr, -6deg));
+  }
+  65% {
+    opacity: 1;
+    transform: translateX(calc(var(--sx, -60px) * -0.08)) rotate(calc(var(--sr, -6deg) * -0.3));
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(-9deg) scale(1.06);
+  }
+  45% {
+    transform: rotate(7deg) scale(1.06);
+  }
+  70% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes grow-up {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes blink-dot {
+  0%,
+  100% {
+    background: var(--color-cream);
+  }
+  40%,
+  90% {
+    background: var(--color-step);
+  }
+}
+
+@keyframes fill-chip {
+  0%,
+  20% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.6);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(4px) scale(1.06);
+  }
+  45%,
+  90% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------------------------- Komponen */
+@layer components {
+  /* Tombol 3D "chunky": bayangan padat di bawah, tertekan saat diklik */
+  .btn-chunky {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-3 border-ink px-7 py-3 text-base font-extrabold tracking-wide whitespace-nowrap uppercase transition-[transform,box-shadow,background-color] duration-100 select-none;
+    box-shadow: 0 5px 0 var(--color-ink);
+  }
+  .btn-chunky:active {
+    transform: translateY(5px);
+    box-shadow: 0 0 0 var(--color-ink);
+  }
+  .btn-chunky-brand {
+    @apply bg-brand text-cream hover:bg-[#ff7a1a];
+  }
+  .btn-chunky-light {
+    @apply bg-paper text-ink hover:bg-sun-light;
+  }
+  .btn-chunky-sm {
+    @apply rounded-xl px-4 py-2 text-sm;
+    box-shadow: 0 4px 0 var(--color-ink);
+  }
+  .btn-chunky-sm:active {
+    transform: translateY(4px);
+  }
+
+  /* Navigasi publik */
+  .public-header {
+    @apply sticky top-0 z-40 border-b-2 border-transparent bg-cream/85 backdrop-blur-md transition-[box-shadow,border-color] duration-300;
+  }
+  .public-header.is-scrolled {
+    @apply border-ink/15 shadow-[0_8px_20px_-12px_rgb(58_31_21/0.5)];
+  }
+  .nav-link {
+    @apply rounded-xl px-3 py-2 font-bold text-ink/80 transition hover:bg-sun-light hover:text-ink aria-current:bg-sun-light aria-current:text-ink;
+  }
+
+  /* CTA di header: muncul setelah tombol hero tidak terlihat (seperti Duolingo) */
+  .header-cta {
+    @apply pointer-events-none translate-y-2 opacity-0 transition duration-300;
+  }
+  .header-cta.is-shown {
+    @apply pointer-events-auto translate-y-0 opacity-100;
+  }
+
+  /* Judul section ala Duolingo: besar, warna brand, huruf kecil */
+  .section-title {
+    @apply text-4xl leading-tight font-extrabold text-brand sm:text-5xl lg:text-6xl;
+  }
+
+  .float {
+    animation: float var(--dur, 5s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  .bob {
+    animation: bob var(--dur, 4.2s) ease-in-out infinite;
+  }
+  .scatter {
+    animation: scatter-in 0.9s var(--ease-out-soft) both;
+    animation-delay: var(--in, 0s);
+  }
+  .pop-spring {
+    animation: pop-spring 0.8s var(--ease-out-soft) both;
+    animation-delay: var(--in, 0s);
+  }
+  .wiggle-hover:hover {
+    animation: wiggle 0.6s ease-in-out;
+  }
+
+  /* Parallax: JS mengisi --py (scroll) dan --mx/--my (mouse) — memakai properti
+     `translate` agar tidak bentrok dengan animasi `transform` */
+  [data-parallax],
+  [data-depth] {
+    translate: var(--mx, 0px) calc(var(--py, 0px) + var(--my, 0px));
+    transition: translate 0.25s ease-out;
+    will-change: translate;
+  }
+
+  /* Gumpalan warna di latar (lapisan parallax) */
+  .blob {
+    @apply pointer-events-none absolute rounded-full;
+  }
+
+  /* Muncul saat di-scroll (diaktifkan oleh JS: html.js) */
+  html.js .reveal {
+    opacity: 0;
+  }
+  html.js .reveal.is-visible {
+    animation: pop-spring 0.85s var(--ease-out-soft) both;
+    animation-delay: calc(var(--i, 0) * 110ms);
+  }
+  html.js .reveal-side.is-visible {
+    animation-name: slide-spring;
+  }
+
+  /* Animasi yang berjalan setelah section terlihat */
+  .grow-bar {
+    transform-origin: bottom;
+  }
+  .is-visible .grow-bar {
+    animation: grow-up 0.9s var(--ease-spring) both;
+    animation-delay: calc(var(--i, 0) * 150ms + 250ms);
+  }
+  .is-visible .demo-dot {
+    animation: blink-dot 6s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 1.2s);
+  }
+  .is-visible .demo-chip {
+    animation: fill-chip 6s var(--ease-out-soft) infinite both;
+    animation-delay: calc(var(--i, 0) * 0.5s + 0.3s);
+  }
+
+  .marquee {
+    @apply flex w-max;
+    animation: marquee 38s linear infinite;
+  }
+  .marquee:hover {
+    animation-play-state: paused;
+  }
+
+  /* Kartu petunjuk kecil (ilustrasi fitur) */
+  .clue-card {
+    @apply flex items-center gap-3 rounded-2xl border-3 border-ink bg-paper px-4 py-3 shadow-[0_5px_0_var(--color-ink)];
+  }
+}
+
+/* Pengguna yang mematikan animasi di OS: tetap bergerak, tapi lebih kecil & pelan */
+@media (prefers-reduced-motion: reduce) {
+  .float,
+  .bob {
+    --amp: -5px;
+    animation-duration: 7s;
+  }
+  .marquee {
+    animation-duration: 80s;
+  }
+  .scatter,
+  .pop-spring,
+  html.js .reveal.is-visible {
+    animation-name: fade-in !important;
+  }
+}
+
+/* ------------------------------------------------------------ Footer */
+@keyframes peek {
+  0%,
+  30%,
+  100% {
+    transform: translateY(42%);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1.5);
+  }
+  40% {
+    transform: translateY(2%) rotate(-7deg);
+    animation-timing-function: ease-in-out;
+  }
+  55% {
+    transform: translateY(2%) rotate(6deg);
+    animation-timing-function: ease-in-out;
+  }
+  70% {
+    transform: translateY(2%) rotate(-3deg);
+    animation-timing-function: cubic-bezier(0.6, -0.4, 0.8, 0.6);
+  }
+  82% {
+    transform: translateY(42%);
+  }
+}
+
+@layer components {
+  .footer-head {
+    @apply mb-4 text-xs font-extrabold tracking-widest text-sun uppercase;
+  }
+  .footer-links {
+    @apply flex flex-col gap-2.5 font-bold;
+  }
+  .footer-links a {
+    @apply inline-block text-cream/85 transition hover:translate-x-1 hover:text-sun;
+  }
+  /* Nomi mengintip dari balik tepi footer */
+  .peek {
+    z-index: -1;
+    animation: peek 6s infinite;
+  }
+}
