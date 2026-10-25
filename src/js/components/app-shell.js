@@ -37,7 +37,7 @@ export async function logout() {
     confirmText: 'Keluar',
   });
   if (!ok) return;
-  authService.logout();
+  await authService.logout();
   location.href = `${ROUTES.login}?keluar=1`;
 }
 
@@ -185,6 +185,9 @@ export function mountAppShell(active) {
   document.addEventListener('click', (e) => {
     if (e.target.closest('[data-logout]')) logout();
   });
+
+  // pastikan token masih berlaku (401 otomatis dialihkan ke login oleh api.js)
+  authService.refresh().catch(() => {});
 
   // animasi berurutan hanya saat halaman dibuka, tidak diulang ketika daftar difilter/dicari
   setTimeout(() => document.querySelectorAll('[data-stagger]').forEach((el) => el.removeAttribute('data-stagger')), 1200);

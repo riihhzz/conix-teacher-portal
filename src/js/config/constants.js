@@ -7,6 +7,12 @@
 export const BASE = import.meta.env.BASE_URL;
 export const asset = (path) => BASE + path.replace(/^\//, '');
 
+/**
+ * Alamat API backend CONIX. Diatur lewat VITE_API_URL (file .env / variabel GitHub Actions);
+ * bawaan: server Laravel lokal (`php artisan serve`).
+ */
+export const API_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1').replace(/\/$/, '');
+
 export const ROUTES = {
   landing: asset('/index.html'),
   login: asset('/auth/login.html'),

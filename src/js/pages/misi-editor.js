@@ -19,7 +19,7 @@ import {
 import { misiService, cekKelengkapanMisi } from '../services/misi.service.js';
 import { $, $$, esc, validateFields } from '../utils/dom.js';
 import { formatXP } from '../utils/format.js';
-import { readFileAsDataURL, assertFileSize } from '../utils/file.js';
+import { assertFileSize } from '../utils/file.js';
 
 mountAppShell('misi');
 
@@ -31,10 +31,16 @@ const params = new URLSearchParams(location.search);
 
 const blankClue = () => ({ judul: '', ikon: IKON_PETUNJUK[0].id, simulasi: '', tipe: 'angka', awal: '', akhir: '', pesan: '' });
 
-function loadMisi() {
+async function loadMisi() {
   const id = params.get('id');
-  const existing = id ? misiService.get(id) : null;
-  if (id && !existing) toast('Misi tidak ditemukan, membuat misi baru.', 'error');
+  let existing = null;
+  if (id) {
+    try {
+      existing = await misiService.get(id);
+    } catch (err) {
+      toast(`${err.message} Membuat misi baru.`, 'error');
+    }
+  }
 
   const misi = existing ?? {
     judul: '',
@@ -52,7 +58,8 @@ function loadMisi() {
   return misi;
 }
 
-const misi = loadMisi();
+const misi = await loadMisi();
+let fotoBaru = null; // File foto yang dipilih tapi belum diunggah
 let step = Math.min(STEPS.length, Math.max(1, Number(params.get('step')) || 1));
 let activeClue = 0;
 let activeSlot = Math.max(0, misi.analisis.kunci.findIndex((k) => !k));
@@ -133,12 +140,13 @@ function validateInfo() {
   return !invalid;
 }
 
-photo.input.addEventListener('change', async () => {
+photo.input.addEventListener('change', () => {
   const file = photo.input.files[0];
   if (!file) return;
   try {
     assertFileSize(file, BATAS_UKURAN.foto);
-    misi.foto = await readFileAsDataURL(file);
+    fotoBaru = file;
+    misi.foto = URL.createObjectURL(file); // pratinjau; diunggah saat misi disimpan
     renderPhoto(file.name);
   } catch (err) {
     toast(err.message, 'error');
@@ -146,6 +154,7 @@ photo.input.addEventListener('change', async () => {
   photo.input.value = '';
 });
 photo.clear.addEventListener('click', () => {
+  fotoBaru = null;
   misi.foto = '';
   renderPhoto();
 });
@@ -414,17 +423,30 @@ function goTo(target) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function persist(status) {
+let menyimpan = false;
+
+/** Simpan misi (dan foto) ke server. Mengembalikan true bila berhasil. */
+async function persist(status) {
+  if (menyimpan) return false;
   readInfo();
+  menyimpan = true;
+  $$('[data-next], [data-save-draft]').forEach((b) => (b.disabled = true));
   try {
-    const saved = misiService.save({ ...misi, status, xp: Number(misi.xp) || 0 });
+    let saved = await misiService.save({ ...misi, status, xp: Number(misi.xp) || 0 });
     misi.id = saved.id;
+    if (fotoBaru) saved = await misiService.uploadFoto(saved.id, fotoBaru);
+    else if (!misi.foto && saved.foto) saved = await misiService.hapusFoto(saved.id);
+    fotoBaru = null;
     misi.status = saved.status;
+    misi.foto = saved.foto;
     syncUrl();
     return true;
   } catch (err) {
     toast(err.message, 'error');
     return false;
+  } finally {
+    menyimpan = false;
+    $$('[data-next], [data-save-draft]').forEach((b) => (b.disabled = false));
   }
 }
 
@@ -441,7 +463,7 @@ $('[data-back]').addEventListener('click', () => {
   else goTo(step - 1);
 });
 
-$('[data-next]').addEventListener('click', () => {
+$('[data-next]').addEventListener('click', async () => {
   if (step === 1 && !validateInfo()) return;
   if (step < STEPS.length) return goTo(step + 1);
 
@@ -451,13 +473,13 @@ $('[data-next]').addEventListener('click', () => {
     renderPreview();
     return;
   }
-  if (persist('aktif')) {
+  if (await persist('aktif')) {
     toast('Misi dipublikasikan! Siswa sudah bisa melihatnya.');
     setTimeout(() => (location.href = ROUTES.misi), 900);
   }
 });
 
-$('[data-save-draft]').addEventListener('click', () => {
+$('[data-save-draft]').addEventListener('click', async () => {
   readInfo();
   if (!misi.judul) {
     if (step !== 1) goTo(1);
@@ -467,7 +489,7 @@ $('[data-save-draft]').addEventListener('click', () => {
     return;
   }
   const keepActive = misi.status === 'aktif' && !cekKelengkapanMisi(misi).length;
-  if (persist(keepActive ? 'aktif' : 'draft')) toast(keepActive ? 'Perubahan disimpan.' : 'Draft tersimpan.');
+  if (await persist(keepActive ? 'aktif' : 'draft')) toast(keepActive ? 'Perubahan disimpan.' : 'Draft tersimpan.');
 });
 
 form.addEventListener('submit', (e) => e.preventDefault());

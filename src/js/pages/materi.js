@@ -6,7 +6,7 @@ import { KATEGORI_MATERI, BATAS_UKURAN } from '../config/constants.js';
 import { materiService } from '../services/materi.service.js';
 import { $, $$, esc, validateFields, showError } from '../utils/dom.js';
 import { formatTanggal, formatUkuran } from '../utils/format.js';
-import { readFileAsDataURL, assertFileSize } from '../utils/file.js';
+import { assertFileSize } from '../utils/file.js';
 
 mountAppShell('materi');
 
@@ -14,13 +14,25 @@ const listEl = $('[data-list]');
 const searchEl = $('[data-search]');
 const filterEl = $('[data-filter]');
 let activeFilter = '';
+let semua = []; // semua materi milik guru, dimuat dari server
+
+async function muat() {
+  try {
+    semua = await materiService.list();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+  render();
+}
+
+const cari = (id) => semua.find((m) => String(m.id) === String(id));
 
 const kategori = (id) => KATEGORI_MATERI.find((k) => k.id === id) ?? KATEGORI_MATERI[0];
 
 /* ---------------------------------------------------------- Render */
 
 function renderCategories() {
-  const all = materiService.list();
+  const all = semua;
   $('[data-categories]').innerHTML = KATEGORI_MATERI.map(
     (k, i) => `
     <button style="--i:${i}" type="button" data-category="${k.id}" aria-pressed="${activeFilter === k.id}"
@@ -51,7 +63,7 @@ function materiCard(m, i) {
       </div>
       <p class="mt-3 line-clamp-3 font-body text-bark">${esc(m.ringkasan || m.konten)}</p>
       <div class="mt-3 flex flex-wrap gap-2 text-sm font-semibold">
-        ${m.lampiran ? `<span class="rounded-full border-2 border-ink bg-paper px-2.5 py-0.5">📎 ${esc(m.lampiran.nama)}</span>` : ''}
+        ${m.lampiran ? `<a href="${esc(m.lampiran.url)}" target="_blank" rel="noopener" class="rounded-full border-2 border-ink bg-paper px-2.5 py-0.5 hover:bg-sun-light">📎 ${esc(m.lampiran.nama)}</a>` : ''}
         ${m.videoUrl ? `<a href="${esc(m.videoUrl)}" target="_blank" rel="noopener" class="rounded-full border-2 border-ink bg-paper px-2.5 py-0.5 hover:bg-sun-light">🎬 Video</a>` : ''}
       </div>
       <div class="mt-auto flex items-center justify-between gap-2 pt-4">
@@ -66,8 +78,7 @@ function materiCard(m, i) {
 
 function renderList() {
   const q = searchEl.value.trim().toLowerCase();
-  const items = materiService
-    .list()
+  const items = semua
     .filter((m) => !activeFilter || m.kategori === activeFilter)
     .filter((m) => !q || `${m.judul} ${m.ringkasan}`.toLowerCase().includes(q));
 
@@ -101,7 +112,10 @@ function openForm(materi = null) {
   const fileName = $('[data-file-name]', form);
   const fileClear = $('[data-file-clear]', form);
   const dropzone = $('[data-dropzone]', form);
+  const submit = $('button[type=submit], button:not([type])', form);
+  // lampiran tersimpan { nama, ukuran, url }, atau file baru { nama, ukuran, file }
   let lampiran = materi?.lampiran ?? null;
+  let idTersimpan = materi?.id;
 
   const showFile = () => {
     fileName.textContent = lampiran ? `${lampiran.nama} (${formatUkuran(lampiran.ukuran)})` : 'Belum ada file dipilih';
@@ -118,11 +132,11 @@ function openForm(materi = null) {
   }
   showFile();
 
-  async function pickFile(file) {
+  function pickFile(file) {
     if (!file) return;
     try {
       assertFileSize(file, BATAS_UKURAN.lampiran);
-      lampiran = { nama: file.name, tipe: file.type, ukuran: file.size, dataUrl: await readFileAsDataURL(file) };
+      lampiran = { nama: file.name, ukuran: file.size, file };
       showFile();
     } catch (err) {
       fileInput.value = '';
@@ -147,7 +161,7 @@ function openForm(materi = null) {
     pickFile(e.dataTransfer.files[0]);
   });
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const invalid = validateFields($$('.input', form));
     if (invalid) {
@@ -156,15 +170,22 @@ function openForm(materi = null) {
       return;
     }
     const { file, ...data } = Object.fromEntries(new FormData(form));
+    if (submit) submit.disabled = true;
     try {
-      materiService.save({ ...materi, ...data, judul: data.judul.trim(), lampiran });
+      let saved = await materiService.save({ ...data, id: idTersimpan, judul: data.judul.trim() });
+      idTersimpan = saved.id; // kirim ulang setelah lampiran gagal = ubah, bukan buat baru
+      if (lampiran?.file) saved = await materiService.uploadLampiran(saved.id, lampiran.file);
+      else if (!lampiran && saved.lampiran) saved = await materiService.hapusLampiran(saved.id);
     } catch (err) {
       showError(error, err.message);
+      if (submit) submit.disabled = false;
+      // materi baru yang sudah tersimpan tapi lampirannya gagal tetap muncul di daftar
+      muat();
       return;
     }
     dialog.close();
     toast(materi ? 'Materi berhasil diperbarui.' : 'Materi berhasil diupload!');
-    render();
+    muat();
   });
 }
 
@@ -186,10 +207,10 @@ filterEl.addEventListener('click', (e) => {
 listEl.addEventListener('click', async (e) => {
   const edit = e.target.closest('[data-edit]');
   const del = e.target.closest('[data-delete]');
-  if (edit) openForm(materiService.get(edit.dataset.edit));
+  if (edit) openForm(cari(edit.dataset.edit));
   if (!del) return;
 
-  const m = materiService.get(del.dataset.delete);
+  const m = cari(del.dataset.delete);
   const ok = await confirmDialog({
     title: 'Hapus materi?',
     message: `"${m.judul}" akan dihapus dan tidak tampil lagi di aplikasi siswa.`,
@@ -197,10 +218,14 @@ listEl.addEventListener('click', async (e) => {
     danger: true,
   });
   if (!ok) return;
-  materiService.remove(m.id);
-  toast('Materi dihapus.');
-  render();
+  try {
+    await materiService.remove(m.id);
+    toast('Materi dihapus.');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+  muat();
 });
 
-render();
+muat();
 if (new URLSearchParams(location.search).has('upload')) openForm();

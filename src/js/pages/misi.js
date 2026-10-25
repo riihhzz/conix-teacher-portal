@@ -13,6 +13,18 @@ const rows = $('[data-rows]');
 const searchEl = $('[data-search]');
 const statusEl = $('[data-status-filter]');
 const STATUS_BG = { aktif: 'bg-ok', draft: 'bg-warn', nonaktif: 'bg-danger' };
+let semua = []; // semua misi milik guru, dimuat dari server
+
+async function muat() {
+  try {
+    semua = await misiService.list();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+  render();
+}
+
+const cari = (id) => semua.find((m) => String(m.id) === String(id));
 
 function statusSelect(m) {
   return `
@@ -54,8 +66,7 @@ function row(m, i) {
 function render() {
   const q = searchEl.value.trim().toLowerCase();
   const status = statusEl.value;
-  const items = misiService
-    .list()
+  const items = semua
     .filter((m) => !status || m.status === status)
     .filter((m) => !q || m.judul.toLowerCase().includes(q));
 
@@ -66,10 +77,10 @@ function render() {
       }</td></tr>`;
 }
 
-rows.addEventListener('change', (e) => {
+rows.addEventListener('change', async (e) => {
   const select = e.target.closest('[data-set-status]');
   if (!select) return;
-  const m = misiService.get(select.dataset.setStatus);
+  const m = cari(select.dataset.setStatus);
   if (select.value === 'aktif') {
     const masalah = cekKelengkapanMisi(m);
     if (masalah.length) {
@@ -78,15 +89,21 @@ rows.addEventListener('change', (e) => {
       return;
     }
   }
-  misiService.save({ ...m, status: select.value });
-  toast(`Status "${m.judul}" menjadi ${STATUS_MISI[select.value].label}.`);
+  select.disabled = true;
+  try {
+    const saved = await misiService.setStatus(m.id, select.value);
+    Object.assign(m, saved);
+    toast(`Status "${m.judul}" menjadi ${STATUS_MISI[saved.status].label}.`);
+  } catch (err) {
+    toast(`Belum bisa diubah: ${err.message}`, 'error');
+  }
   render();
 });
 
 rows.addEventListener('click', async (e) => {
   const del = e.target.closest('[data-delete]');
   if (!del) return;
-  const m = misiService.get(del.dataset.delete);
+  const m = cari(del.dataset.delete);
   const ok = await confirmDialog({
     title: 'Hapus misi?',
     message: `"${m.judul}" beserta petunjuk dan kunci jawabannya akan dihapus.`,
@@ -94,11 +111,15 @@ rows.addEventListener('click', async (e) => {
     danger: true,
   });
   if (!ok) return;
-  misiService.remove(m.id);
-  toast('Misi dihapus.');
-  render();
+  try {
+    await misiService.remove(m.id);
+    toast('Misi dihapus.');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+  muat();
 });
 
 searchEl.addEventListener('input', render);
 statusEl.addEventListener('change', render);
-render();
+muat();
