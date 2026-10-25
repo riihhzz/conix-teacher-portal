@@ -336,3 +336,28 @@
     animation: peek 6s infinite;
   }
 }
+
+/* ------------------------------------------------------- Menu HP (laci) */
+@layer components {
+  .drawer {
+    @apply fixed top-0 right-0 z-50 flex h-dvh w-[min(80vw,300px)] translate-x-full flex-col border-l-3 border-ink bg-cream px-5 py-4 shadow-[-12px_0_30px_-12px_rgb(58_31_21/0.45)];
+    transition: translate 0.35s cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  .drawer.is-open {
+    @apply translate-x-0;
+  }
+  .drawer-backdrop {
+    @apply pointer-events-none fixed inset-0 z-40 bg-ink/45 opacity-0 transition-opacity duration-300;
+  }
+  .drawer-backdrop.is-open {
+    @apply pointer-events-auto opacity-100;
+  }
+  .drawer-link {
+    @apply rounded-xl px-3 py-3 font-extrabold text-ink transition hover:bg-sun-light active:bg-sun-light;
+  }
+  /* tautan masuk satu per satu saat laci terbuka */
+  .drawer.is-open .drawer-link {
+    animation: slide-in-left 0.4s var(--ease-out-soft) both;
+    animation-delay: calc(var(--i, 0) * 60ms + 120ms);
+  }
+}

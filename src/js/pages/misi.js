@@ -28,8 +28,8 @@ function row(m, i) {
   const terisi = m.petunjuk.filter((p) => p.judul?.trim()).length;
   return `
     <tr style="--i:${i}">
-      <td>${i + 1}</td>
-      <td class="text-left!">
+      <td class="stack-hide">${i + 1}</td>
+      <td class="stack-full text-left!">
         <div class="flex items-center gap-3">
           <img src="${IMG.missionList}" alt="" class="size-10 shrink-0" />
           <div class="min-w-0">
@@ -38,11 +38,11 @@ function row(m, i) {
           </div>
         </div>
       </td>
-      <td class="text-brand">${formatXP(m.xp)}</td>
-      <td>${terisi}/${JUMLAH_PETUNJUK}</td>
-      <td>${statusSelect(m)}</td>
-      <td>
-        <div class="flex justify-center gap-2">
+      <td class="text-brand" data-label="XP">${formatXP(m.xp)}</td>
+      <td data-label="Petunjuk">${terisi}/${JUMLAH_PETUNJUK}</td>
+      <td data-label="Status">${statusSelect(m)}</td>
+      <td class="stack-full">
+        <div class="flex flex-wrap justify-center gap-2">
           <a href="${ROUTES.misiEditor}?id=${m.id}" class="btn btn-sm btn-secondary">Edit</a>
           <a href="${ROUTES.misiEditor}?id=${m.id}&step=4" class="btn btn-sm btn-secondary">Pratinjau</a>
           <button type="button" class="btn btn-sm btn-danger" data-delete="${m.id}">Hapus</button>

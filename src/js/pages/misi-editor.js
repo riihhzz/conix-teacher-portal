@@ -68,12 +68,12 @@ if (misi.id) {
 function renderStepper() {
   $('[data-stepper]').innerHTML = STEPS.map(
     (label, i) => `
-      ${i ? '<li aria-hidden="true" class="mx-1 h-1.75 w-6 rounded-full bg-ink sm:w-10"></li>' : ''}
+      ${i ? '<li aria-hidden="true" class="mx-0.5 h-1.5 w-3 rounded-full bg-ink sm:mx-1 sm:h-1.75 sm:w-10"></li>' : ''}
       <li>
         <button type="button" data-goto="${i + 1}" ${i + 1 === step ? 'aria-current="step"' : ''}
           class="flex cursor-pointer items-center gap-2 rounded-full pr-2 text-base font-semibold sm:gap-3 sm:text-[22px]">
-          <span class="size-11 shrink-0 rounded-full border-2 border-ink transition sm:size-16 ${i + 1 <= step ? 'bg-step' : 'bg-cream'}"></span>
-          ${label}
+          <span class="size-8 shrink-0 rounded-full border-2 border-ink transition sm:size-16 ${i + 1 <= step ? 'bg-step' : 'bg-cream'}"></span>
+          <span class="${i + 1 === step ? '' : 'sr-only sm:not-sr-only'}">${label}</span>
         </button>
       </li>`,
   ).join('');

@@ -23,16 +23,24 @@ new IntersectionObserver(([entry]) => headerCta.classList.toggle('is-shown', !en
   $('[data-hero-cta]'),
 );
 
-/* ---------- Menu HP ---------- */
+/* ---------- Menu HP: laci dari samping, tidak mendorong isi halaman ---------- */
 const menuToggle = $('[data-menu-toggle]');
 const mobileMenu = $('[data-mobile-menu]');
+const menuBackdrop = $('[data-menu-backdrop]');
 const setMenu = (open) => {
-  mobileMenu.classList.toggle('hidden', !open);
-  mobileMenu.classList.toggle('flex', open);
+  mobileMenu.classList.toggle('is-open', open);
+  menuBackdrop.classList.toggle('is-open', open);
+  mobileMenu.inert = !open;
+  document.documentElement.classList.toggle('overflow-hidden', open); // halaman di belakang tidak ikut ter-scroll
   menuToggle.setAttribute('aria-expanded', String(open));
+  (open ? $('a', mobileMenu) : menuToggle).focus({ preventScroll: true });
 };
-menuToggle.addEventListener('click', () => setMenu(mobileMenu.classList.contains('hidden')));
+menuToggle.addEventListener('click', () => setMenu(true));
+$('[data-menu-close]').addEventListener('click', () => setMenu(false));
+menuBackdrop.addEventListener('click', () => setMenu(false));
 mobileMenu.addEventListener('click', (e) => e.target.closest('a') && setMenu(false));
+document.addEventListener('keydown', (e) => e.key === 'Escape' && !mobileMenu.inert && setMenu(false));
+matchMedia('(min-width: 48rem)').addEventListener('change', (e) => e.matches && !mobileMenu.inert && setMenu(false));
 
 /* ---------- Tandai menu sesuai section yang sedang dilihat ---------- */
 const navLinks = $$('[data-nav] a');
@@ -133,4 +141,4 @@ if (matchMedia('(pointer: fine)').matches) {
 /* ---------- Tombol unduh aplikasi murid ---------- */
 $('[data-app-download]').innerHTML = APP_DOWNLOAD_URL
   ? `<a href="${APP_DOWNLOAD_URL}" class="btn-chunky btn-chunky-brand" target="_blank" rel="noopener">Unduh Aplikasi</a>`
-  : '<span class="btn-chunky btn-chunky-light pointer-events-none opacity-80">Segera hadir di Android</span>';
+  : '<span class="btn-chunky btn-chunky-light pointer-events-none whitespace-normal text-center opacity-80">Segera hadir di Android</span>';

@@ -37,11 +37,11 @@ function render() {
         .map(
           (s, i) => `
         <tr style="--i:${i}">
-          <td class="font-bold">${s.rank}</td>
-          <td>${esc(s.nama)}</td>
-          <td>${s.misiSelesai}</td>
-          <td>${s.lencana}</td>
-          <td class="font-bold text-brand">${xp(s.xp)}</td>
+          <td class="font-bold" data-label="Peringkat">${s.rank}</td>
+          <td data-label="Nama">${esc(s.nama)}</td>
+          <td data-label="Misi Selesai">${s.misiSelesai}</td>
+          <td data-label="Lencana">${s.lencana}</td>
+          <td class="font-bold text-brand" data-label="XP">${xp(s.xp)}</td>
         </tr>`,
         )
         .join('')

@@ -190,6 +190,42 @@
     @apply transition-colors hover:bg-paper;
   }
 
+  /* HP: tiap baris tabel menjadi kartu (label di kiri, nilai di kanan) — tidak perlu digeser */
+  @media (width < 40rem) {
+    .table-stack {
+      min-width: 0 !important;
+    }
+    .table-stack thead {
+      @apply sr-only;
+    }
+    .table-stack,
+    .table-stack tbody,
+    .table-stack tr,
+    .table-stack td {
+      display: block;
+    }
+    .table-stack tr {
+      @apply px-4 py-3;
+    }
+    .table-stack tr + tr {
+      @apply border-t-2 border-ink;
+    }
+    .table-stack td {
+      @apply flex items-center justify-between gap-3 border-0! px-0 py-1.5 text-right;
+    }
+    .table-stack td[data-label]::before {
+      content: attr(data-label);
+      @apply text-left font-body text-sm font-semibold text-bark;
+    }
+    .table-stack td.stack-full,
+    .table-stack td[colspan] {
+      @apply block text-left;
+    }
+    .table-stack td.stack-hide {
+      display: none;
+    }
+  }
+
   /* ---------- Gambar ---------- */
   .figure-shadow {
     filter: drop-shadow(var(--shadow-figure));

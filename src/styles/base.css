@@ -122,3 +122,14 @@
     animation-name: fade-in;
   }
 }
+
+/*
+ * Reset layar sempit: anak elemen grid boleh menyusut lebih kecil dari isinya.
+ * Tanpa ini, teks/tombol yang tidak bisa turun baris memaksa kolom melebar
+ * melewati layar HP lalu terpotong (mis. di lebar 360px).
+ */
+@layer base {
+  .grid > * {
+    min-width: 0;
+  }
+}
