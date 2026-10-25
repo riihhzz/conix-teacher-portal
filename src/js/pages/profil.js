@@ -7,7 +7,7 @@ import { authService } from '../services/auth.service.js';
 import { statistikKelas } from '../services/siswa.service.js';
 import { $, $$, esc, validateFields, showError } from '../utils/dom.js';
 import { formatTanggal } from '../utils/format.js';
-import { readFileAsDataURL, assertFileSize } from '../utils/file.js';
+import { assertFileSize } from '../utils/file.js';
 
 let user = mountAppShell('profil');
 
@@ -49,21 +49,24 @@ function render() {
     .join('');
 }
 
-const stat = statistikKelas();
-$('[data-summary]').innerHTML = [
-  ['Misi Dibuat', stat.totalMisi],
-  ['Misi Aktif', stat.misiAktif],
-  ['Materi', stat.totalMateri],
-  ['Siswa', stat.jumlahSiswa],
-]
-  .map(
-    ([label, value]) => `
-    <div class="rounded-[13px] border-2 border-ink bg-cream p-3">
-      <dt class="font-semibold">${label}</dt>
-      <dd class="text-3xl font-extrabold">${value}</dd>
-    </div>`,
-  )
-  .join('');
+statistikKelas()
+  .then((stat) => {
+    $('[data-summary]').innerHTML = [
+      ['Misi Dibuat', stat.totalMisi],
+      ['Misi Aktif', stat.misiAktif],
+      ['Materi', stat.totalMateri],
+      ['Siswa', stat.jumlahSiswa],
+    ]
+      .map(
+        ([label, value]) => `
+        <div class="rounded-[13px] border-2 border-ink bg-cream p-3">
+          <dt class="font-semibold">${label}</dt>
+          <dd class="text-3xl font-extrabold">${value}</dd>
+        </div>`,
+      )
+      .join('');
+  })
+  .catch((err) => toast(err.message, 'error'));
 
 $('[data-photo-input]').addEventListener('change', async (e) => {
   const file = e.target.files[0];
@@ -71,7 +74,7 @@ $('[data-photo-input]').addEventListener('change', async (e) => {
   if (!file) return;
   try {
     assertFileSize(file, BATAS_UKURAN.foto);
-    user = authService.updateProfile({ foto: await readFileAsDataURL(file) });
+    user = await authService.uploadFoto(file);
     toast('Foto profil diperbarui.');
     render();
   } catch (err) {
@@ -79,10 +82,14 @@ $('[data-photo-input]').addEventListener('change', async (e) => {
   }
 });
 
-$('[data-photo-remove]').addEventListener('click', () => {
-  user = authService.updateProfile({ foto: '' });
-  toast('Foto profil dihapus.');
-  render();
+$('[data-photo-remove]').addEventListener('click', async () => {
+  try {
+    user = await authService.hapusFoto();
+    toast('Foto profil dihapus.');
+    render();
+  } catch (err) {
+    toast(err.message, 'error');
+  }
 });
 
 $('[data-edit-profile]').addEventListener('click', () => {
@@ -93,7 +100,7 @@ $('[data-edit-profile]').addEventListener('click', () => {
   form.elements.panggilan.value = user.panggilan ?? '';
   form.elements.email.value = user.email;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const invalid = validateFields($$('.input', form));
     if (invalid) {
@@ -103,7 +110,7 @@ $('[data-edit-profile]').addEventListener('click', () => {
     }
     const data = Object.fromEntries(new FormData(form));
     try {
-      user = authService.updateProfile({
+      user = await authService.updateProfile({
         nama: data.nama.trim(),
         panggilan: data.panggilan.trim(),
         email: data.email.trim(),

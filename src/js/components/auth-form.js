@@ -56,13 +56,15 @@ export function showNotice(text) {
 }
 
 /**
- * Validasi & kirim form. `action` menerima isi form; lempar Error untuk menampilkan pesan.
+ * Validasi & kirim form. `action` (boleh async) menerima isi form; lempar Error untuk menampilkan pesan.
  */
 export function bindAuthForm(form, action) {
   const error = $('[data-error]', form);
   const submit = $('button:not([type=button])', form);
 
-  form.addEventListener('submit', (e) => {
+  const label = submit.textContent;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     showError(error, '');
     const invalid = validateFields($$('.input', form));
@@ -71,9 +73,13 @@ export function bindAuthForm(form, action) {
       invalid.focus();
       return;
     }
+    submit.disabled = true;
+    submit.textContent = 'Memuat…';
     try {
-      action(Object.fromEntries(new FormData(form)));
+      await action(Object.fromEntries(new FormData(form)));
     } catch (err) {
+      submit.disabled = false;
+      submit.textContent = label;
       showError(error, err.message);
       form.classList.remove('shake');
       void form.offsetWidth; // ulangi animasi getar
@@ -85,8 +91,6 @@ export function bindAuthForm(form, action) {
       }
       return;
     }
-    submit.disabled = true;
-    submit.textContent = 'Memuat…';
     nomi?.play('lompat');
     setTimeout(goNext, nomi ? 700 : 0); // beri waktu Nomi melompat senang
   });

@@ -1,32 +1,29 @@
-import { db, clone } from '../data/storage.js';
-import { authService } from './auth.service.js';
-import { materiService } from './materi.service.js';
-import { misiService } from './misi.service.js';
+import { api } from './api.js';
 
 /** Data Total XP & Peringkat siswa di kelas guru (DFD 7.0). */
 export const siswaService = {
-  ranking() {
-    const kode = authService.currentUser()?.kodeKelas;
-    return clone(db.data.siswa.filter((s) => s.kodeKelas === kode))
-      .sort((a, b) => b.xp - a.xp)
-      .map((s, i) => ({ ...s, rank: i + 1 }));
+  async ranking() {
+    const { data } = await api('GET', '/guru/siswa');
+    return data.map((s) => ({
+      id: s.id,
+      rank: s.peringkat,
+      nama: s.nama,
+      foto: s.foto_url ?? '',
+      xp: s.total_xp,
+      misiSelesai: s.misi_selesai,
+      lencana: s.lencana,
+    }));
   },
 };
 
-export function statistikKelas() {
-  const misi = misiService.list();
-  const siswa = siswaService.ranking();
-  const aktif = misi.filter((m) => m.status === 'aktif').length;
-  const rataSelesai =
-    siswa.length && aktif
-      ? Math.round((siswa.reduce((n, s) => n + Math.min(s.misiSelesai, aktif), 0) / (siswa.length * aktif)) * 100)
-      : 0;
-
+/** Ringkasan beranda: jumlah misi, materi, siswa, dan rata-rata penyelesaian (%). */
+export async function statistikKelas() {
+  const { data } = await api('GET', '/guru/statistik');
   return {
-    totalMisi: misi.length,
-    misiAktif: aktif,
-    totalMateri: materiService.list().length,
-    jumlahSiswa: siswa.length,
-    rataSelesai,
+    totalMisi: data.total_misi,
+    misiAktif: data.misi_aktif,
+    totalMateri: data.total_materi,
+    jumlahSiswa: data.jumlah_siswa,
+    rataSelesai: data.rata_selesai,
   };
 }

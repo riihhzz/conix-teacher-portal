@@ -20,8 +20,12 @@ $('[data-copy-code]').addEventListener('click', async () => {
   }
 });
 
+const [stat, semuaMisi] = await Promise.all([statistikKelas(), misiService.list()]).catch((err) => {
+  toast(err.message, 'error');
+  return [{ totalMisi: 0, jumlahSiswa: 0, totalMateri: 0, rataSelesai: 0 }, []];
+});
+
 /* Statistik (4 kartu krem) */
-const stat = statistikKelas();
 $('[data-stats]').innerHTML = [
   ['Total Misi', stat.totalMisi],
   ['Jumlah Siswa', stat.jumlahSiswa],
@@ -39,7 +43,7 @@ $('[data-stats]').innerHTML = [
   .join('');
 
 /* Daftar misi (baris kuning + badge status) */
-const missions = misiService.list().slice(0, 6);
+const missions = semuaMisi.slice(0, 6);
 $('[data-missions]').innerHTML = missions.length
   ? missions
       .map(

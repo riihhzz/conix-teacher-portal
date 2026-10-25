@@ -1,5 +1,6 @@
 import { mountAppShell } from '../components/app-shell.js';
 import { emptyState } from '../components/ui.js';
+import { toast } from '../components/toast.js';
 import { siswaService } from '../services/siswa.service.js';
 import { $, esc } from '../utils/dom.js';
 import { formatAngka } from '../utils/format.js';
@@ -7,7 +8,10 @@ import { formatAngka } from '../utils/format.js';
 const user = mountAppShell('siswa');
 $('[data-class-code]').textContent = user.kodeKelas;
 
-const ranking = siswaService.ranking();
+const ranking = await siswaService.ranking().catch((err) => {
+  toast(err.message, 'error');
+  return [];
+});
 const rows = $('[data-rows]');
 const searchEl = $('[data-search]');
 const MEDAL = ['bg-[#ffd23f]', 'bg-[#d9d9d9]', 'bg-[#e0915a]'];

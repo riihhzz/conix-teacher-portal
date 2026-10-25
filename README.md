@@ -69,8 +69,7 @@ Web/
 │   │   └── nomi.css            # gerakan maskot Nomi (bernapas, mengangguk, melompat)
 │   └── js/
 │       ├── config/constants.js # route, kategori, ikon, lencana, kartu analisis, link APK
-│       ├── data/               # seed.js (data contoh) & storage.js (localStorage)
-│       ├── services/           # auth, materi, misi, siswa (lapisan akses data)
+│       ├── services/           # api (klien HTTP + token), auth, materi, misi, siswa
 │       ├── components/         # app-shell (header+sidebar), auth-form, nomi (maskot hidup), modal, toast, ui
 │       ├── utils/              # dom, format, file
 │       └── pages/              # logika per halaman (landing, login, register, dashboard, ...)
@@ -80,13 +79,21 @@ Web/
 
 Aset gambar diambil dari `conix_app/assets/images` agar tampilan web dan aplikasi murid seragam.
 
-## Menghubungkan ke Backend
+## Backend
 
-Data saat ini tersimpan di **localStorage** browser (frontend-only), sehingga belum terkirim ke aplikasi murid.
-Semua halaman hanya mengakses data lewat `src/js/services/*`. Untuk memakai database bersama
-(Supabase / Firebase / Laravel API), cukup ganti isi `src/js/data/storage.js` dan service terkait.
+Semua data (akun guru, materi, misi, peringkat siswa) disimpan di **CONIX Backend** (Laravel + MySQL,
+repo `conix-backend`), database yang sama dengan aplikasi murid. Halaman hanya mengakses data lewat
+`src/js/services/*`; `services/api.js` mengirim request beserta token login guru.
 
-Struktur data mengikuti model di aplikasi murid (`lib/core/models/mission.dart`):
+Alamat API diatur lewat variabel `VITE_API_URL`:
+
+- **Lokal:** jalankan backend dengan `php artisan serve`. Tanpa pengaturan apa pun, web memakai
+  `http://127.0.0.1:8000/api/v1`. Untuk alamat lain, salin `.env.example` menjadi `.env` lalu ubah isinya.
+- **GitHub Pages:** isi variabel repo **Settings → Secrets and variables → Actions → Variables**
+  bernama `VITE_API_URL` (mis. `https://conix.alwaysdata.net/api/v1`), lalu jalankan ulang workflow deploy.
+
+Struktur data di web mengikuti model di aplikasi murid (`lib/core/models/mission.dart`); service menerjemahkan
+format JSON API ke bentuk ini:
 
 | Web (misi)                         | Aplikasi (Mission)          |
 | ---------------------------------- | --------------------------- |
@@ -97,4 +104,4 @@ Struktur data mengikuti model di aplikasi murid (`lib/core/models/mission.dart`)
 | `lencana.nama`, `lencana.gambar`   | `badgeName`, `badgeImage`   |
 | `status: draft`                    | `Mission.comingSoon`        |
 
-Untuk mengulang data contoh: buka DevTools → Console → `localStorage.clear()` lalu muat ulang.
+Untuk mengulang data contoh, jalankan `php artisan migrate:fresh --seed` di backend.

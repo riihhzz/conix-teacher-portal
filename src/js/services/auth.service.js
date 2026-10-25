@@ -1,66 +1,65 @@
-import { db, session, uid, now } from '../data/storage.js';
+import { api, session, formFile } from './api.js';
 
-const sanitize = (user) => {
-  if (!user) return null;
-  const { password, ...safe } = user;
-  return safe;
-};
+/** Profil guru dari API → bentuk yang dipakai halaman. */
+const keUser = (g) => ({
+  id: g.id,
+  nama: g.nama,
+  panggilan: g.panggilan,
+  email: g.email,
+  foto: g.foto_url ?? '',
+  kodeKelas: g.kode_kelas,
+  bergabung: g.bergabung,
+});
 
-const findByEmail = (email) => db.data.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+function simpanSesi({ token, guru }) {
+  const user = keUser(guru);
+  session.set(token, user);
+  return user;
+}
 
-/** Kode kelas unik dari nama depan guru, mis. "AGUS123". */
-function generateKodeKelas(nama) {
-  const base = (nama.trim().split(/\s+/)[0] || 'GURU').replace(/[^a-z]/gi, '').toUpperCase().slice(0, 6) || 'GURU';
-  let kode;
-  do kode = `${base}${Math.floor(100 + Math.random() * 900)}`;
-  while (db.data.users.some((u) => u.kodeKelas === kode));
-  return kode;
+function perbaruiUser({ data }) {
+  const user = keUser(data);
+  session.set(null, user);
+  return user;
 }
 
 export const authService = {
+  /** Guru yang sedang login (dari cache lokal), atau null. */
   currentUser() {
-    return sanitize(db.data.users.find((u) => u.id === session.get()));
+    return session.token() ? session.user() : null;
   },
 
-  login(email, password) {
-    const user = findByEmail(email);
-    if (!user || user.password !== password) throw new Error('Email atau password salah.');
-    if (user.role !== 'guru') throw new Error('Website ini khusus guru. Murid silakan memakai aplikasi CONIX.');
-    session.set(user.id);
-    return sanitize(user);
+  /** Ambil ulang profil dari server (mis. setelah diubah di perangkat lain). */
+  async refresh() {
+    return perbaruiUser(await api('GET', '/guru/profil'));
   },
 
-  register({ nama, email, password }) {
-    if (findByEmail(email)) throw new Error('Email sudah terdaftar.');
-    const user = {
-      id: uid('usr'),
-      nama: nama.trim(),
-      panggilan: nama.trim(),
-      email: email.trim(),
-      password,
-      role: 'guru',
-      kodeKelas: generateKodeKelas(nama),
-      foto: '',
-      bergabung: now(),
-    };
-    db.data.users.push(user);
-    db.commit();
-    session.set(user.id);
-    return sanitize(user);
+  async login(email, password) {
+    return simpanSesi(await api('POST', '/guru/masuk', { email: email.trim(), password }));
   },
 
-  updateProfile(patch) {
-    const user = db.data.users.find((u) => u.id === session.get());
-    if (!user) throw new Error('Sesi berakhir, silakan login ulang.');
-    if (patch.email && patch.email !== user.email && findByEmail(patch.email)) {
-      throw new Error('Email sudah dipakai akun lain.');
+  async register({ nama, email, password }) {
+    return simpanSesi(await api('POST', '/guru/daftar', { nama: nama.trim(), email: email.trim(), password }));
+  },
+
+  async updateProfile({ nama, panggilan, email }) {
+    return perbaruiUser(await api('PUT', '/guru/profil', { nama, panggilan: panggilan || null, email }));
+  },
+
+  async uploadFoto(file) {
+    return perbaruiUser(await api('POST', '/guru/profil/foto', formFile('foto', file)));
+  },
+
+  async hapusFoto() {
+    return perbaruiUser(await api('DELETE', '/guru/profil/foto'));
+  },
+
+  async logout() {
+    try {
+      await api('POST', '/guru/keluar');
+    } catch {
+      /* token sudah tidak berlaku: tetap keluar di sisi browser */
     }
-    Object.assign(user, patch);
-    db.commit();
-    return sanitize(user);
-  },
-
-  logout() {
     session.clear();
   },
 };
