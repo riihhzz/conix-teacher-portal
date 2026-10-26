@@ -9,11 +9,11 @@ import { avatar } from './ui.js';
 import { confirmDialog } from './modal.js';
 
 const NAV = [
-  { key: 'dashboard', label: 'Beranda', href: ROUTES.dashboard, icon: asset('/images/nav/beranda.png') },
-  { key: 'materi', label: 'Materi', href: ROUTES.materi, icon: asset('/images/nav/materi.png') },
-  { key: 'misi', label: 'Misi', href: ROUTES.misi, icon: asset('/images/nav/misi.png') },
-  { key: 'siswa', label: 'Peringkat', href: ROUTES.siswa, icon: asset('/images/nav/peringkat.png') },
-  { key: 'profil', label: 'Profil', href: ROUTES.profil, icon: asset('/images/nav/profil.png') },
+  { key: 'dashboard', label: 'Beranda', href: ROUTES.dashboard, icon: asset('/images/nav/beranda.webp') },
+  { key: 'materi', label: 'Materi', href: ROUTES.materi, icon: asset('/images/nav/materi.webp') },
+  { key: 'misi', label: 'Misi', href: ROUTES.misi, icon: asset('/images/nav/misi.webp') },
+  { key: 'siswa', label: 'Peringkat', href: ROUTES.siswa, icon: asset('/images/nav/peringkat.webp') },
+  { key: 'profil', label: 'Profil', href: ROUTES.profil, icon: asset('/images/nav/profil.webp') },
 ];
 
 const LOGOUT_ICON = `<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></svg>`;
@@ -70,7 +70,7 @@ function headerTemplate(user) {
             </div>
           </div>
           <a role="menuitem" href="${ROUTES.profil}" class="flex items-center gap-3 px-4 py-2.5 font-semibold transition hover:bg-sun-light">
-            <img src="${asset('images/nav/profil.png')}" alt="" class="size-5 brightness-0" /> Profil Saya
+            <img src="${asset('images/nav/profil.webp')}" alt="" class="size-5 brightness-0" /> Profil Saya
           </a>
           <button type="button" role="menuitem" data-logout
             class="flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-left font-semibold text-danger transition hover:bg-danger/10">

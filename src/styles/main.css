@@ -2,7 +2,16 @@
  * CONIX Teacher Portal — stylesheet utama.
  * Diproses oleh Tailwind CSS v4 lewat Vite (npm run dev / npm run build).
  */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+/* Font di-host sendiri (ikut di-build Vite): tanpa rantai request ke Google Fonts
+   yang menahan tampilan halaman. Hanya subset Latin & ketebalan yang dipakai. */
+@import '@fontsource/plus-jakarta-sans/latin-400.css';
+@import '@fontsource/plus-jakarta-sans/latin-500.css';
+@import '@fontsource/plus-jakarta-sans/latin-600.css';
+@import '@fontsource/plus-jakarta-sans/latin-700.css';
+@import '@fontsource/plus-jakarta-sans/latin-800.css';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
 @import 'tailwindcss';
 
 @import './theme.css';

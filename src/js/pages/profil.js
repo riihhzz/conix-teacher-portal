@@ -125,4 +125,38 @@ $('[data-edit-profile]').addEventListener('click', () => {
   });
 });
 
+$('[data-change-password]').addEventListener('click', () => {
+  const dialog = openTemplateModal('password-form');
+  const form = $('form', dialog);
+  const error = $('[data-error]', form);
+  const submit = $('button:not([type])', form);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showError(error, '');
+    const invalid = validateFields($$('.input', form));
+    if (invalid) {
+      showError(error, `${invalid.labels[0]?.textContent ?? 'Isian'}: ${invalid.validationMessage}`);
+      invalid.focus();
+      return;
+    }
+    const data = Object.fromEntries(new FormData(form));
+    if (data.password !== data.password_confirmation) {
+      form.elements.password_confirmation.setAttribute('aria-invalid', 'true');
+      showError(error, 'Ulangi password baru: tidak sama dengan password baru.');
+      return;
+    }
+    submit.disabled = true;
+    try {
+      await authService.changePassword(data);
+    } catch (err) {
+      submit.disabled = false;
+      showError(error, err.message);
+      return;
+    }
+    dialog.close();
+    toast('Password berhasil diganti.');
+  });
+});
+
 render();

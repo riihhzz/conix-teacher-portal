@@ -46,6 +46,11 @@ export const authService = {
     return perbaruiUser(await api('PUT', '/guru/profil', { nama, panggilan: panggilan || null, email }));
   },
 
+  /** Ganti password; sesi di perangkat lain ikut dikeluarkan oleh server. */
+  async changePassword({ password_lama, password, password_confirmation }) {
+    await api('PUT', '/guru/profil/password', { password_lama, password, password_confirmation });
+  },
+
   async uploadFoto(file) {
     return perbaruiUser(await api('POST', '/guru/profil/foto', formFile('foto', file)));
   },

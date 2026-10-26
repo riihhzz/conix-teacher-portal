@@ -29,13 +29,13 @@ export const ROUTES = {
 export const APP_DOWNLOAD_URL = '';
 
 export const IMG = {
-  logotype: asset('/images/brand/logotype.png'),
-  logoMark: asset('/images/brand/logo-mark.png'),
-  mascot: asset('/images/mascot/nomi.png'),
-  mascotSad: asset('/images/mascot/nomi-sedih.png'),
-  missionList: asset('/images/mission/daftar-misi.png'),
-  missionDaily: asset('/images/mission/misi-harian.png'),
-  avatar: asset('/images/icons/avatar.png'),
+  logotype: asset('/images/brand/logotype.webp'),
+  logoMark: asset('/images/brand/logo-mark.webp'),
+  mascot: asset('/images/mascot/nomi.webp'),
+  mascotSad: asset('/images/mascot/nomi-sedih.webp'),
+  missionList: asset('/images/mission/daftar-misi.webp'),
+  missionDaily: asset('/images/mission/misi-harian.webp'),
+  avatar: asset('/images/icons/avatar.webp'),
   arrow: asset('/images/icons/arrow.svg'),
 };
 
@@ -44,13 +44,13 @@ export const KATEGORI_MATERI = [
     id: 'permintaan',
     nama: 'Permintaan',
     deskripsi: 'Selidiki bagaimana harga memengaruhi jumlah barang yang diminta.',
-    ikon: asset('/images/topics/permintaan.png'),
+    ikon: asset('/images/topics/permintaan.webp'),
   },
   {
     id: 'penawaran',
     nama: 'Penawaran',
     deskripsi: 'Temukan hubungan harga dengan jumlah barang yang ditawarkan.',
-    ikon: asset('/images/topics/penawaran.png'),
+    ikon: asset('/images/topics/penawaran.webp'),
   },
 ];
 
@@ -63,13 +63,13 @@ export const IKON_PETUNJUK = [
   { id: 'stok', label: 'Stok' },
   { id: 'sosmed', label: 'Media Sosial' },
   { id: 'pesan', label: 'Pesan' },
-].map((ikon) => ({ ...ikon, src: asset(`images/clues/${ikon.id}.png`) }));
+].map((ikon) => ({ ...ikon, src: asset(`images/clues/${ikon.id}.webp`) }));
 
 export const LENCANA = [
   { id: 'lencana-1', label: 'Lencana Oranye 1' },
   { id: 'lencana-2', label: 'Lencana Oranye 2' },
   { id: 'lencana-3', label: 'Lencana Oranye 3' },
-].map((l) => ({ ...l, src: asset(`images/badges/${l.id}.png`) }));
+].map((l) => ({ ...l, src: asset(`images/badges/${l.id}.webp`) }));
 
 /** Pilihan kartu analisis default (sama dengan _choices di mission_flow_screen.dart). */
 export const KARTU_DEFAULT = ['Permintaan', 'Penawaran', 'Tetap', 'Naik', 'Harga', 'Turun'];

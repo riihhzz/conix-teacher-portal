@@ -1,5 +1,5 @@
 import { mountAppShell } from '../components/app-shell.js';
-import { openModal } from '../components/modal.js';
+import { confirmDialog, openModal } from '../components/modal.js';
 import { avatar, emptyState, statusBadge } from '../components/ui.js';
 import { toast } from '../components/toast.js';
 import { KATEGORI_MATERI } from '../config/constants.js';
@@ -10,10 +10,12 @@ import { formatAngka, formatTanggal } from '../utils/format.js';
 const user = mountAppShell('siswa');
 $('[data-class-code]').textContent = user.kodeKelas;
 
-const ranking = await siswaService.ranking().catch((err) => {
-  toast(err.message, 'error');
-  return [];
-});
+const loadRanking = () =>
+  siswaService.ranking().catch((err) => {
+    toast(err.message, 'error');
+    return [];
+  });
+let ranking = await loadRanking();
 const rows = $('[data-rows]');
 const searchEl = $('[data-search]');
 const MEDAL = ['bg-[#ffd23f]', 'bg-[#d9d9d9]', 'bg-[#e0915a]'];
@@ -25,20 +27,22 @@ const nameButton = (s, extra = '') =>
     class="cursor-pointer text-left underline decoration-ink/30 decoration-dotted underline-offset-4 transition hover:text-brand hover:decoration-brand ${extra}">${esc(s.nama)}</button>`;
 
 /* Tiga besar */
-$('[data-podium]').innerHTML = ranking
-  .slice(0, 3)
-  .map(
-    (s, i) => `
-    <div style="--i:${i}" class="${i === 0 ? 'panel-sun' : 'card'} flex items-center gap-4 p-5">
-      <span class="grid size-14 shrink-0 place-items-center rounded-full border-3 border-ink text-2xl font-extrabold ${MEDAL[i]}">${s.rank}</span>
-      <div class="min-w-0">
-        <p class="truncate text-xl font-bold">${nameButton(s, 'max-w-full truncate')}</p>
-        <p class="font-body text-bark">${s.misiSelesai} misi selesai</p>
-        <p class="text-lg font-extrabold text-brand">${xp(s.xp)}</p>
-      </div>
-    </div>`,
-  )
-  .join('');
+function renderPodium() {
+  $('[data-podium]').innerHTML = ranking
+    .slice(0, 3)
+    .map(
+      (s, i) => `
+      <div style="--i:${i}" class="${i === 0 ? 'panel-sun' : 'card'} flex items-center gap-4 p-5">
+        <span class="grid size-14 shrink-0 place-items-center rounded-full border-3 border-ink text-2xl font-extrabold ${MEDAL[i]}">${s.rank}</span>
+        <div class="min-w-0">
+          <p class="truncate text-xl font-bold">${nameButton(s, 'max-w-full truncate')}</p>
+          <p class="font-body text-bark">${s.misiSelesai} misi selesai</p>
+          <p class="text-lg font-extrabold text-brand">${xp(s.xp)}</p>
+        </div>
+      </div>`,
+    )
+    .join('');
+}
 
 function render() {
   const q = searchEl.value.trim().toLowerCase();
@@ -150,8 +154,34 @@ function detailHtml(s) {
           <h3 class="text-xl font-bold">Kuis Kilat</h3>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">${kuis}</div>
         </section>
+
+        <section class="flex flex-wrap items-center justify-between gap-3 border-t-2 border-ink/15 pt-4">
+          <p class="font-body text-sm text-bark">Salah kelas? Keluarkan siswa ini; akunnya tetap ada dan bisa bergabung lagi.</p>
+          <button type="button" class="btn btn-sm btn-danger" data-remove-student>Keluarkan dari Kelas</button>
+        </section>
       </div>
     </div>`;
+}
+
+async function removeStudent(dialog, s) {
+  const ok = await confirmDialog({
+    title: 'Keluarkan siswa?',
+    message: `${s.nama} akan dikeluarkan dari kelas ${user.kodeKelas}. Progres & akunnya tetap ada; ia bisa bergabung lagi dengan kode kelas.`,
+    confirmText: 'Keluarkan',
+    danger: true,
+  });
+  if (!ok) return;
+  try {
+    await siswaService.remove(s.id);
+  } catch (err) {
+    toast(err.message, 'error');
+    return;
+  }
+  dialog.close();
+  toast(`${s.nama} dikeluarkan dari kelas.`);
+  ranking = await loadRanking();
+  renderPodium();
+  render();
 }
 
 async function openDetail(id) {
@@ -166,6 +196,7 @@ async function openDetail(id) {
     if (!dialog.open) return;
     dialog.innerHTML = detailHtml(detail);
     dialog.querySelectorAll('[data-close]').forEach((btn) => btn.addEventListener('click', () => dialog.close()));
+    $('[data-remove-student]', dialog).addEventListener('click', () => removeStudent(dialog, detail));
   } catch (err) {
     dialog.close();
     toast(err.message, 'error');
@@ -178,4 +209,5 @@ document.addEventListener('click', (e) => {
 });
 
 searchEl.addEventListener('input', render);
+renderPodium();
 render();

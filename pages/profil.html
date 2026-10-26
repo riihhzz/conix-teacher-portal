@@ -36,7 +36,10 @@
         <section>
           <div class="flex items-center justify-between gap-4">
             <h2 class="text-2xl font-bold sm:text-[26px]">Informasi Akun</h2>
-            <button type="button" class="btn btn-sm btn-secondary" data-edit-profile>Edit Profil</button>
+            <div class="flex flex-wrap justify-end gap-2">
+              <button type="button" class="btn btn-sm btn-secondary" data-change-password>Ganti Password</button>
+              <button type="button" class="btn btn-sm btn-secondary" data-edit-profile>Edit Profil</button>
+            </div>
           </div>
           <dl class="mt-6 grid gap-x-10 gap-y-8 sm:grid-cols-2" data-account-info></dl>
         </section>
@@ -44,7 +47,7 @@
         <section class="panel-sun p-6">
           <h2 class="text-2xl font-bold">Ringkasan Kelas</h2>
           <dl class="mt-4 grid grid-cols-2 gap-4" data-summary></dl>
-          <img src="/images/mascot/nomi.png" alt="" class="figure-shadow mx-auto mt-5 h-52 w-auto" />
+          <img src="/images/mascot/nomi.webp" alt="" class="figure-shadow mx-auto mt-5 h-52 w-auto" />
         </section>
       </div>
     </main>
@@ -70,6 +73,32 @@
         <div class="mt-6 flex justify-end gap-3">
           <button type="button" class="btn btn-secondary" data-close>Batal</button>
           <button class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </template>
+
+    <template id="password-form">
+      <form novalidate class="p-6">
+        <h2 class="text-2xl font-bold">Ganti Password</h2>
+        <p class="mt-1 font-body text-sm text-bark">Setelah diganti, akun ini otomatis keluar dari perangkat lain.</p>
+        <div class="mt-4 space-y-4">
+          <div>
+            <label class="label" for="pw-lama">Password Lama</label>
+            <input class="input" id="pw-lama" name="password_lama" type="password" required autocomplete="current-password" />
+          </div>
+          <div>
+            <label class="label" for="pw-baru">Password Baru</label>
+            <input class="input" id="pw-baru" name="password" type="password" required minlength="6" autocomplete="new-password" />
+          </div>
+          <div>
+            <label class="label" for="pw-ulang">Ulangi Password Baru</label>
+            <input class="input" id="pw-ulang" name="password_confirmation" type="password" required minlength="6" autocomplete="new-password" />
+          </div>
+          <p class="field-error" data-error hidden></p>
+        </div>
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" class="btn btn-secondary" data-close>Batal</button>
+          <button class="btn btn-primary">Simpan Password</button>
         </div>
       </form>
     </template>

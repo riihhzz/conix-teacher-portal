@@ -15,6 +15,11 @@ export const siswaService = {
     }));
   },
 
+  /** Keluarkan siswa dari kelas (akun & progresnya tetap ada). */
+  async remove(id) {
+    await api('DELETE', `/guru/siswa/${id}`);
+  },
+
   /** Detail satu siswa: progres per misi kelas dan skor kuis kilat. */
   async detail(id) {
     const { data: s } = await api('GET', `/guru/siswa/${id}`);
