@@ -26,7 +26,7 @@ export const ROUTES = {
 };
 
 /** Link unduh aplikasi murid (APK). Kosong = tombol tampil sebagai "Segera hadir". */
-export const APP_DOWNLOAD_URL = '';
+export const APP_DOWNLOAD_URL = 'https://github.com/riihhzz/conix-teacher-portal/releases/latest/download/CONIX.apk';
 
 export const IMG = {
   logotype: asset('/images/brand/logotype.webp'),
