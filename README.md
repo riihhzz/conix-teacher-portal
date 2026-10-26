@@ -27,7 +27,11 @@ Build produksi: `npm run build` (hasil di `dist/`), cek hasil build dengan `npm 
 **Deploy:** setiap `git push` ke branch `main` otomatis di-build dan dipublikasikan ke GitHub Pages
 (`.github/workflows/deploy.yml`). Progresnya bisa dilihat di tab **Actions** repo.
 
-**Akun demo:** `agus@conix.id` / `guru123` (kelas `AGUS123`, sama dengan data di aplikasi murid).
+**Akun demo (lokal saja):** `agus@conix.id` / `guru123` (kelas `AGUS123`) tersedia jika backend lokal
+diisi data contoh (`php artisan migrate --seed`). Di server produksi tidak ada akun demo; guru mendaftar sendiri.
+
+**Detail siswa:** di halaman Peringkat, klik nama siswa untuk melihat progres per misi
+(bintang, jumlah percobaan, XP) dan skor kuis kilat.
 
 ## Struktur Folder
 
