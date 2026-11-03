@@ -25,6 +25,24 @@
           </header>
 
           <div>
+            <span class="label" id="jenis-label">Jenis Misi</span>
+            <div role="radiogroup" aria-labelledby="jenis-label" class="grid gap-3 sm:grid-cols-2" data-jenis-list>
+              <label class="cursor-pointer rounded-[18px] border-3 border-ink bg-white p-4 shadow-soft transition hover:-translate-y-0.5 has-checked:border-brand has-checked:bg-sun-light has-checked:ring-4 has-checked:ring-brand/30">
+                <input type="radio" name="jenis" value="analisis" class="sr-only" />
+                <span class="text-2xl" aria-hidden="true">🔍</span>
+                <span class="block text-xl font-bold">Analisis Sebab-Akibat</span>
+                <span class="block font-body text-bark">Siswa membaca 3 petunjuk lalu menyusun 4 kartu, mis. Harga Naik → Permintaan Turun.</span>
+              </label>
+              <label class="cursor-pointer rounded-[18px] border-3 border-ink bg-white p-4 shadow-soft transition hover:-translate-y-0.5 has-checked:border-brand has-checked:bg-sun-light has-checked:ring-4 has-checked:ring-brand/30">
+                <input type="radio" name="jenis" value="fungsi" class="sr-only" />
+                <span class="text-2xl" aria-hidden="true">🔢</span>
+                <span class="block text-xl font-bold">Hitung Fungsi</span>
+                <span class="block font-body text-bark">Isi data pasar, kunci dihitung otomatis. Siswa membuka gembok hitungan bertahap dan grafiknya ikut terbangun.</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
             <label class="label" for="judul">Judul Misi</label>
             <input class="input" id="judul" name="judul" required maxlength="80" placeholder="Contoh: Misteri Tiket Konser" />
           </div>
@@ -65,7 +83,7 @@
         </section>
 
         <!-- LANGKAH 2 · Petunjuk (Desktop - 33 / 38) -->
-        <section data-step="2" hidden>
+        <section data-step="2" data-jenis="analisis" hidden>
           <header>
             <h1 class="text-3xl font-bold sm:text-[40px]">Editor Petunjuk</h1>
             <p class="font-body text-lg sm:text-[22px]">Atur informasi yang akan ditemukan siswa selama investigasi.</p>
@@ -122,7 +140,7 @@
         </section>
 
         <!-- LANGKAH 3 · Analisis (FDesktop - 41) -->
-        <section data-step="3" hidden>
+        <section data-step="3" data-jenis="analisis" hidden>
           <header>
             <h1 class="text-3xl font-bold sm:text-[40px]">Editor Analisis</h1>
             <p class="max-w-195 font-body text-lg sm:text-[22px]">
@@ -151,6 +169,29 @@
             <label class="label" for="penjelasan">Penjelasan Jawaban</label>
             <p class="hint mb-2">Ditampilkan ke siswa setelah misi berhasil dipecahkan.</p>
             <textarea class="input min-h-28" id="penjelasan" maxlength="400" placeholder="Saat harga tiket naik, jumlah pembeli turun. Inilah hukum permintaan..." data-explanation></textarea>
+          </div>
+        </section>
+
+        <!-- LANGKAH 2 · Data Fungsi (misi Hitung Fungsi) -->
+        <section class="space-y-6" data-step="2" data-jenis="fungsi" hidden>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-[40px]">Data Fungsi</h1>
+            <p class="font-body text-lg sm:text-[22px]">Pilih topik dan isi data pasarnya. Kunci jawaban, petunjuk, dan grafik dihitung otomatis.</p>
+          </header>
+          <div class="space-y-6" data-fungsi-data></div>
+        </section>
+
+        <!-- LANGKAH 3 · Gembok & Kunci (misi Hitung Fungsi) -->
+        <section data-step="3" data-jenis="fungsi" hidden>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-[40px]">Gembok &amp; Kunci</h1>
+            <p class="max-w-195 font-body text-lg sm:text-[22px]">Gembok yang akan dibuka siswa satu per satu, lengkap dengan kunci dan petunjuk bertahap.</p>
+          </header>
+          <div class="mt-5" data-fungsi-kunci></div>
+          <div class="mt-8">
+            <label class="label" for="penjelasan-fungsi">Pesan Tambahan dari Guru <span class="hint">(opsional)</span></label>
+            <p class="hint mb-2">Ditampilkan sebelum penjelasan otomatis setelah misi terpecahkan.</p>
+            <textarea class="input min-h-24" id="penjelasan-fungsi" maxlength="400" placeholder="Hebat! Ingat, keseimbangan terjadi saat Qd = Qs." data-explanation-fungsi></textarea>
           </div>
         </section>
 

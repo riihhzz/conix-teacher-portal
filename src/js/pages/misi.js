@@ -37,7 +37,12 @@ function statusSelect(m) {
 }
 
 function row(m, i) {
+  const fungsi = m.jenis === 'fungsi';
   const terisi = m.petunjuk.filter((p) => p.judul?.trim()).length;
+  const isi = fungsi ? `${m.rancangan?.langkah?.length ?? 0} gembok` : `${terisi}/${JUMLAH_PETUNJUK}`;
+  const jenis = fungsi
+    ? `<span class="mr-1 rounded-md bg-[#3d7bd9] px-1.5 py-0.5 align-middle text-xs font-bold text-white">HITUNG · ${esc(m.rancangan?.nama ?? '')}</span>`
+    : '<span class="mr-1 rounded-md bg-honey px-1.5 py-0.5 align-middle text-xs font-bold">ANALISIS</span>';
   return `
     <tr style="--i:${i}">
       <td class="stack-hide">${i + 1}</td>
@@ -45,18 +50,19 @@ function row(m, i) {
         <div class="flex items-center gap-3">
           <img src="${IMG.missionList}" alt="" class="size-10 shrink-0" />
           <div class="min-w-0">
-            <p class="font-bold">${esc(m.judul)}</p>
+            <p class="font-bold">${jenis}${esc(m.judul)}</p>
             <p class="line-clamp-1 font-body text-sm font-normal text-bark">${esc(m.deskripsi) || '<i>Belum ada deskripsi</i>'}</p>
           </div>
         </div>
       </td>
       <td class="text-brand" data-label="XP">${formatXP(m.xp)}</td>
-      <td data-label="Petunjuk">${terisi}/${JUMLAH_PETUNJUK}</td>
+      <td data-label="Isi">${isi}</td>
       <td data-label="Status">${statusSelect(m)}</td>
       <td class="stack-full">
         <div class="flex flex-wrap justify-center gap-2">
           <a href="${ROUTES.misiEditor}?id=${m.id}" class="btn btn-sm btn-secondary">Edit</a>
           <a href="${ROUTES.misiEditor}?id=${m.id}&step=4" class="btn btn-sm btn-secondary">Pratinjau</a>
+          <a href="${ROUTES.misiLaporan}?id=${m.id}" class="btn btn-sm btn-secondary">Laporan</a>
           <button type="button" class="btn btn-sm btn-danger" data-delete="${m.id}">Hapus</button>
         </div>
       </td>

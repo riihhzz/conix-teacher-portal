@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
 const root = import.meta.dirname;
-const pages = ['dashboard', 'materi', 'misi', 'misi-editor', 'siswa', 'profil'];
+const pages = ['dashboard', 'materi', 'misi', 'misi-editor', 'misi-laporan', 'siswa', 'profil'];
 
 /** Nama repo GitHub = sub-path di GitHub Pages (https://<user>.github.io/<repo>/). */
 const REPO_NAME = 'conix-teacher-portal';

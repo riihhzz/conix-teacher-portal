@@ -4,6 +4,7 @@ import { JUMLAH_PETUNJUK } from '../config/constants.js';
 /** Misi dari API → bentuk yang dipakai halaman (mengikuti model Mission di aplikasi murid). */
 const keMisi = (m) => ({
   id: m.id,
+  jenis: m.jenis ?? 'analisis',
   judul: m.judul,
   deskripsi: m.deskripsi ?? '',
   foto: m.foto_url ?? '',
@@ -20,11 +21,15 @@ const keMisi = (m) => ({
     pesan: p.pesan ?? '',
   })),
   analisis: { kartu: m.kartu ?? [], kunci: m.kunci ?? [], penjelasan: m.penjelasan ?? '' },
+  // Misi "Hitung Fungsi": topik + data pasar dari guru; langkah & kunci dihitung server.
+  fungsi: { topik: m.fungsi?.topik ?? 'keseimbangan', data: { ...(m.fungsi?.data ?? {}) } },
+  rancangan: m.rancangan ?? null,
   diubah: m.diubah,
 });
 
 /** Bentuk halaman → isi request SimpanMisiRequest di backend. */
 const keBody = (misi) => ({
+  jenis: misi.jenis,
   judul: misi.judul,
   deskripsi: misi.deskripsi || null,
   xp: Number(misi.xp) || 0,
@@ -41,8 +46,9 @@ const keBody = (misi) => ({
     nilai_akhir: p.akhir || null,
     pesan: p.pesan || null,
   })),
-  kartu: misi.analisis.kartu,
-  kunci: misi.analisis.kunci.map((k) => k || null),
+  ...(misi.jenis === 'fungsi'
+    ? { petunjuk: [], kartu: [], kunci: [], fungsi: { topik: misi.fungsi.topik, data: misi.fungsi.data } }
+    : { kartu: misi.analisis.kartu, kunci: misi.analisis.kunci.map((k) => k || null), fungsi: null }),
 });
 
 /** Data Misi (DFD 3.0 Input Misi & Max XP). */
@@ -83,6 +89,24 @@ export const misiService = {
     const { data } = await api('DELETE', `/guru/misi/${id}/foto`);
     return keMisi(data);
   },
+
+  /** Topik misi fungsi beserta isian data yang diminta. */
+  async topikFungsi() {
+    const { data } = await api('GET', '/guru/misi/topik-fungsi');
+    return data;
+  },
+
+  /** Hitung gembok, kunci, grafik, masalah, dan peringatan dari data guru (tanpa menyimpan). */
+  async pratinjauFungsi(topik, data) {
+    const { data: hasil } = await api('POST', '/guru/misi/pratinjau-fungsi', { topik, data });
+    return hasil;
+  },
+
+  /** Laporan satu misi: ringkasan, langkah yang sering salah, dan hasil per siswa. */
+  async laporan(id) {
+    const { data } = await api('GET', `/guru/misi/${id}/laporan`);
+    return data;
+  },
 };
 
 /**
@@ -95,6 +119,13 @@ export function cekKelengkapanMisi(misi) {
   if (!misi.deskripsi?.trim()) masalah.push('Deskripsi kasus belum diisi.');
   if (!(Number(misi.xp) > 0)) masalah.push('Jumlah XP harus lebih dari 0.');
   if (!misi.lencana?.nama?.trim()) masalah.push('Nama lencana reward belum diisi.');
+
+  // Misi fungsi: kunci dihitung otomatis, cukup datanya masuk akal (hasil pratinjau server).
+  if (misi.jenis === 'fungsi') {
+    if (!misi.rancangan) masalah.push('Data fungsi belum diperiksa.');
+    else masalah.push(...(misi.rancangan.masalah ?? []));
+    return masalah;
+  }
 
   for (let i = 0; i < JUMLAH_PETUNJUK; i++) {
     const p = misi.petunjuk?.[i];

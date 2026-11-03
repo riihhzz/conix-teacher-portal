@@ -20,10 +20,15 @@ import { misiService, cekKelengkapanMisi } from '../services/misi.service.js';
 import { $, $$, esc, validateFields } from '../utils/dom.js';
 import { formatXP } from '../utils/format.js';
 import { assertFileSize } from '../utils/file.js';
+import { renderDataFungsi, renderKunciFungsi, pratinjauFungsi } from './misi-fungsi.js';
 
 mountAppShell('misi');
 
-const STEPS = ['Informasi', 'Petunjuk', 'Analisis', 'Publikasi'];
+const STEPS_JENIS = {
+  analisis: ['Informasi', 'Petunjuk', 'Analisis', 'Publikasi'],
+  fungsi: ['Informasi', 'Data Fungsi', 'Gembok & Kunci', 'Publikasi'],
+};
+const STEPS = STEPS_JENIS.analisis; // jumlah langkah sama untuk semua jenis
 const form = $('[data-wizard]');
 const params = new URLSearchParams(location.search);
 
@@ -43,6 +48,9 @@ async function loadMisi() {
   }
 
   const misi = existing ?? {
+    jenis: params.get('jenis') === 'fungsi' ? 'fungsi' : 'analisis',
+    fungsi: { topik: 'keseimbangan', data: {} },
+    rancangan: null,
     judul: '',
     deskripsi: '',
     foto: '',
@@ -73,7 +81,7 @@ if (misi.id) {
 /* ---------------------------------------------------------- Stepper */
 
 function renderStepper() {
-  $('[data-stepper]').innerHTML = STEPS.map(
+  $('[data-stepper]').innerHTML = STEPS_JENIS[misi.jenis].map(
     (label, i) => `
       ${i ? '<li aria-hidden="true" class="mx-0.5 h-1.5 w-3 rounded-full bg-ink sm:mx-1 sm:h-1.75 sm:w-10"></li>' : ''}
       <li>
@@ -119,6 +127,12 @@ function fillInfo() {
   form.elements.deskripsi.value = misi.deskripsi;
   form.elements.xp.value = misi.xp;
   form.elements.lencana.value = misi.lencana.nama;
+  // Jenis dikunci setelah misi tersimpan: riwayat jawaban siswa bergantung pada jenisnya.
+  $$('[name=jenis]', form).forEach((r) => {
+    r.checked = r.value === misi.jenis;
+    r.disabled = Boolean(misi.id);
+    r.closest('label').classList.toggle('opacity-50', Boolean(misi.id) && r.value !== misi.jenis);
+  });
   renderPhoto();
   renderBadges();
 }
@@ -159,6 +173,11 @@ photo.clear.addEventListener('click', () => {
   renderPhoto();
 });
 $('[data-badge-list]').addEventListener('change', (e) => (misi.lencana.gambar = e.target.value));
+$('[data-jenis-list]').addEventListener('change', (e) => {
+  misi.jenis = e.target.value;
+  renderStepper();
+});
+$('[data-explanation-fungsi]').addEventListener('input', (e) => (misi.analisis.penjelasan = e.target.value));
 
 /* -------------------------------------------- Langkah 2: Petunjuk */
 
@@ -352,6 +371,7 @@ function cluePreview(clue, total) {
 }
 
 function renderPreview() {
+  if (misi.jenis === 'fungsi') return renderPreviewFungsi();
   const clues = filledClues();
   previewIndex = Math.min(previewIndex, Math.max(0, clues.length - 1));
   const miniSlot = (i) => `<span class="slot min-h-11 rounded-2xl border-[3px] text-base sm:text-lg">${esc(misi.analisis.kunci[i]) || '—'}</span>`;
@@ -394,6 +414,32 @@ function renderPreview() {
     : '<p class="font-sans font-bold text-success-text">✓ Misi siap dipublikasikan ke aplikasi siswa.</p>';
 }
 
+function renderPreviewFungsi() {
+  $('[data-preview]').innerHTML = `
+    <article class="${previewCard} text-center">
+      <p class="mx-auto w-fit rounded-lg bg-[#3d7bd9] px-2 py-0.5 text-xs font-bold tracking-wide text-white">MISI HITUNG · ${esc(misi.rancangan?.nama ?? '')}</p>
+      <h2 class="mt-2 text-2xl font-bold sm:text-[34px]">${esc(misi.judul) || 'Judul misi'}</h2>
+      <p class="mt-4 rounded-[23px] border-4 border-ink px-4 py-3 text-left font-body">${esc(misi.deskripsi) || 'Deskripsi kasus...'}</p>
+      <div class="mt-4 flex items-center justify-center gap-3">
+        <img src="${lencanaSrc(misi.lencana.gambar)}" alt="" class="size-12" />
+        <p class="text-left font-bold">
+          <span class="block text-brand">${formatXP(misi.xp)}</span>
+          <span class="block text-sm">${esc(misi.lencana.nama) || 'Lencana belum diberi nama'}</span>
+        </p>
+      </div>
+    </article>
+    ${pratinjauFungsi(misi)}`;
+  renderChecklist();
+}
+
+function renderChecklist() {
+  const masalah = cekKelengkapanMisi(misi);
+  $('[data-checklist]').innerHTML = masalah.length
+    ? `<p class="font-sans font-bold text-danger">Lengkapi dulu sebelum publikasi:</p>
+       <ul class="mt-1 list-disc pl-6">${masalah.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>`
+    : '<p class="font-sans font-bold text-success-text">✓ Misi siap dipublikasikan ke aplikasi siswa.</p>';
+}
+
 $('[data-preview]').addEventListener('click', (e) => {
   const total = filledClues().length;
   if (e.target.closest('[data-preview-prev]')) previewIndex = (previewIndex - 1 + total) % total;
@@ -404,18 +450,31 @@ $('[data-preview]').addEventListener('click', (e) => {
 
 /* -------------------------------------------------------- Navigasi */
 
-const RENDER_STEP = { 1: () => {}, 2: fillClue, 3: renderAnalysis, 4: renderPreview };
+const RENDER_STEP = {
+  analisis: { 1: () => {}, 2: fillClue, 3: renderAnalysis, 4: renderPreview },
+  fungsi: {
+    1: () => {},
+    2: () => renderDataFungsi(misi),
+    3: () => {
+      renderKunciFungsi(misi);
+      $('[data-explanation-fungsi]').value = misi.analisis.penjelasan ?? '';
+    },
+    4: renderPreview,
+  },
+};
 
 function syncUrl() {
-  const query = new URLSearchParams({ ...(misi.id && { id: misi.id }), step });
+  const query = new URLSearchParams({ ...(misi.id && { id: misi.id }), ...(!misi.id && { jenis: misi.jenis }), step });
   history.replaceState(null, '', `?${query}`);
 }
 
 function goTo(target) {
   if (step === 1) readInfo();
   step = target;
-  $$('[data-step]', form).forEach((s) => (s.hidden = Number(s.dataset.step) !== step));
-  RENDER_STEP[step]();
+  $$('[data-step]', form).forEach(
+    (s) => (s.hidden = Number(s.dataset.step) !== step || (s.dataset.jenis && s.dataset.jenis !== misi.jenis)),
+  );
+  RENDER_STEP[misi.jenis][step]();
   $('[data-back]').textContent = step === 1 ? 'Batal' : 'Kembali';
   $('[data-next]').textContent = step === STEPS.length ? 'Publikasikan' : 'Lanjut';
   renderStepper();
@@ -495,4 +554,7 @@ $('[data-save-draft]').addEventListener('click', async () => {
 form.addEventListener('submit', (e) => e.preventDefault());
 
 fillInfo();
+if (misi.jenis === 'fungsi' && !misi.rancangan && misi.id) {
+  misi.rancangan = await misiService.pratinjauFungsi(misi.fungsi.topik, misi.fungsi.data).catch(() => null);
+}
 goTo(step);

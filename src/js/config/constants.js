@@ -21,6 +21,7 @@ export const ROUTES = {
   materi: asset('/pages/materi.html'),
   misi: asset('/pages/misi.html'),
   misiEditor: asset('/pages/misi-editor.html'),
+  misiLaporan: asset('/pages/misi-laporan.html'),
   siswa: asset('/pages/siswa.html'),
   profil: asset('/pages/profil.html'),
 };

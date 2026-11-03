@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <title>Laporan Misi · CONIX Teacher Portal</title>
+  </head>
+  <body>
+    <main class="page">
+      <a href="misi.html" class="btn btn-sm btn-secondary mt-6">‹ Daftar Misi</a>
+
+      <section class="mt-4 panel-sun px-6 py-6 sm:px-9">
+        <p class="text-sm font-bold tracking-widest text-bark" data-jenis>LAPORAN MISI</p>
+        <h1 class="text-3xl font-bold sm:text-[50px] sm:leading-tight" data-judul>Memuat…</h1>
+        <p class="mt-1 font-body text-lg">Lihat siapa yang sudah mencoba dan bagian mana yang paling sering salah.</p>
+      </section>
+
+      <section class="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4" data-ringkasan aria-live="polite"></section>
+
+      <section class="mt-8 grid gap-6 lg:grid-cols-[1fr_420px]">
+        <div class="card-frame">
+          <h2 class="text-2xl font-bold">Langkah yang Paling Sering Salah</h2>
+          <p class="font-body text-bark" data-langkah-hint>Jumlah siswa yang pernah salah di setiap langkah.</p>
+          <div class="mt-4 space-y-3" data-langkah></div>
+        </div>
+        <div class="card-frame" data-saran></div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-2xl font-bold">Hasil per Siswa</h2>
+        <div class="table-wrap mt-4">
+          <table class="table-conix min-w-205">
+            <thead data-head></thead>
+            <tbody data-rows></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/js/pages/misi-laporan.js"></script>
+  </body>
+</html>
