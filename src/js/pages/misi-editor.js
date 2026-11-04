@@ -56,7 +56,7 @@ async function loadMisi() {
     foto: '',
     xp: '',
     status: 'draft',
-    lencana: { nama: '', gambar: LENCANA[0].id },
+    lencana: { nama: LENCANA[0].nama, gambar: LENCANA[0].id },
     petunjuk: [],
     analisis: { kartu: [...KARTU_DEFAULT], kunci: [], penjelasan: '' },
   };
@@ -172,7 +172,17 @@ photo.clear.addEventListener('click', () => {
   misi.foto = '';
   renderPhoto();
 });
-$('[data-badge-list]').addEventListener('change', (e) => (misi.lencana.gambar = e.target.value));
+$('[data-badge-list]').addEventListener('change', (e) => {
+  const lama = LENCANA.find((l) => l.id === misi.lencana.gambar);
+  const baru = LENCANA.find((l) => l.id === e.target.value);
+  misi.lencana.gambar = e.target.value;
+  // Nama ikut gambar, kecuali guru sudah menulis nama sendiri yang berbeda dari tulisan gambar lama.
+  const nama = form.elements.lencana.value.trim();
+  if (baru && (!nama || nama === lama?.nama)) {
+    form.elements.lencana.value = baru.nama;
+    misi.lencana.nama = baru.nama;
+  }
+});
 $('[data-jenis-list]').addEventListener('change', (e) => {
   misi.jenis = e.target.value;
   renderStepper();

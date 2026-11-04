@@ -67,9 +67,10 @@ export const IKON_PETUNJUK = [
 ].map((ikon) => ({ ...ikon, src: asset(`images/clues/${ikon.id}.webp`) }));
 
 export const LENCANA = [
-  { id: 'lencana-1', label: 'Lencana Oranye 1' },
-  { id: 'lencana-2', label: 'Lencana Oranye 2' },
-  { id: 'lencana-3', label: 'Lencana Oranye 3' },
+  // `nama` = tulisan yang tercetak di gambar lencana.
+  { id: 'lencana-1', label: 'Lencana Detektif Permintaan', nama: 'Detektif Permintaan' },
+  { id: 'lencana-2', label: 'Lencana Pemburu Tren', nama: 'Pemburu Tren' },
+  { id: 'lencana-3', label: 'Lencana Pelacak Penawaran', nama: 'Pelacak Penawaran' },
 ].map((l) => ({ ...l, src: asset(`images/badges/${l.id}.webp`) }));
 
 /** Pilihan kartu analisis default (sama dengan _choices di mission_flow_screen.dart). */
